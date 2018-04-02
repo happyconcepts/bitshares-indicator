@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # bitshares-indicator
 
 import os
