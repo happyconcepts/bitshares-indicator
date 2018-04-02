@@ -77,11 +77,11 @@ class buyBTSindicator(object):
         dialog.destroy()
 
     def price_update(self):
-        try:
+        timestamp = datetime.now().strftime('%m/%d %H:%M:%S')
+	try:
 	    if not self.test:
 		self.b = binance(self.symbol)
 		self.g = gate(self.symbol, self.base)
-		timestamp = datetime.now().strftime('%m/%d %H:%M:%S')
                 self.ind.set_label(self.g.run() + " /BTC: " + self.b.run() , "")
 		self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
 		print timestamp + " prices updated"
