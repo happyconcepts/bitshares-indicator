@@ -81,6 +81,7 @@ class buyBTSindicator(object):
 		self.g = gate(self.symbol, self.base)
 		timestamp = datetime.now().strftime('%m/%d %H:%M:%S')
                 self.ind.set_label(self.g.run() + " /BTC: " + self.b.run() , "")
+		self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
 		print "prices updated"
 	    else:
 		self.ind.set_label("Now in test mode.","")
@@ -88,6 +89,7 @@ class buyBTSindicator(object):
         except Exception as e:
             #print(str(e))
             self.ind.set_label("unable to update prices - check connection","")
+	    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bt_s.png")
 	    print "prices not updated (probably no connection)"
         return True
 
