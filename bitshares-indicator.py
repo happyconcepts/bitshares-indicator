@@ -65,7 +65,7 @@ class buyBTSindicator(object):
         dialog.set_license('MIT License\n\n' + 'Copy of the license available upon request' )
         dialog.set_wrap_license(True)
 	dialog.set_copyright('Copyright 2018 Ben Bird.')
-	dialog.set_comments('This AppIndicator is for Linux systems using Unity.\n\n The indicator tracks the price of Bitshares crypto.\n\n')
+	dialog.set_comments('This AppIndicator is for Linux systems using Unity.\n\n'+'The indicator tracks the price of Bitshares crypto.\n\n')
 	dialog.set_website('http://www.buybts.com')
         dialog.run()
         dialog.destroy()
