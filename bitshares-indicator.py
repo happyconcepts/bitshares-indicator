@@ -65,7 +65,7 @@ class buyBTSindicator(object):
         dialog.set_license('MIT License\n\n' + 'Copy of the license available upon request' )
         dialog.set_wrap_license(True)
 	dialog.set_copyright('Copyright 2018 Ben Bird.')
-	dialog.set_comments('This Linux AppIndicator tracks the price of Bitshares crypto.\n\n')
+	dialog.set_comments('This AppIndicator is for Linux systems using Unity.\n\n The indicator tracks the price of Bitshares crypto.\n\n')
 	dialog.set_website('http://www.buybts.com')
         dialog.run()
         dialog.destroy()
@@ -82,8 +82,9 @@ class buyBTSindicator(object):
 		self.ind.set_label("Now in test mode.","")
 		print "prices not updated (test mode)"
         except Exception as e:
-            print(str(e))
+            #print(str(e))
             self.ind.set_label("unable to update prices - check connection","")
+	    print "prices not updated (probably no connection)"
         return True
 
     def main(self):
