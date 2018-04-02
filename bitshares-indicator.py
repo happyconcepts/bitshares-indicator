@@ -21,12 +21,14 @@ class buyBTSindicator(object):
         )
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 	self.test = False
+	# update interval (minutes):
+	self.interval = 5  
         self.symbol = 'BTS'
 	self.base = 'USDT'
 	self.menu = Gtk.Menu()
 	self.build_menu()
         self.price_update()
-        GLib.timeout_add_seconds(60 * 5, self.price_update)
+        GLib.timeout_add_seconds(60 * self.interval, self.price_update)
 
     def build_menu(self):
         item_refresh = Gtk.MenuItem()
