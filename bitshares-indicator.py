@@ -17,7 +17,7 @@ print "starting "+APPID +" v. " +VERSION
 class buyBTSindicator(object):
     
     def __init__(self):
-	self.ind = AppIndicator.Indicator.new(APPID,os.path.dirname(os.path.realpath(__file__)) +"/img/bitshares.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
+	self.ind = AppIndicator.Indicator.new(APPID,os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
         )
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 	self.test = False
