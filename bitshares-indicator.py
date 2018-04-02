@@ -5,6 +5,7 @@
 import os
 import requests 
 import gi
+import signal
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GLib
@@ -19,6 +20,7 @@ print "starting "+APPID +" v. " +VERSION
 class buyBTSindicator(object):
     
     def __init__(self):
+	signal.signal(signal.SIGINT, signal.SIG_DFL)
 	self.ind = AppIndicator.Indicator.new(APPID,os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
         )
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
