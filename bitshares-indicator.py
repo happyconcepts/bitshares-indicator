@@ -17,6 +17,7 @@ from gi.repository.GdkPixbuf import Pixbuf
 
 gi.require_version('AppIndicator3', '0.1')
 from gi.repository import AppIndicator3 as AppIndicator
+
 from datetime import datetime
 
 VERSION 	= '0.2'
@@ -27,7 +28,6 @@ class buyBTSindicator(object):
     
     # constructor
     def __init__(self):
-	
 	self.ind = AppIndicator.Indicator.new(APPID,os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
         )
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
@@ -76,10 +76,10 @@ class buyBTSindicator(object):
 	dialog.set_border_width(10)
         dialog.set_program_name('bitshares-indicator')
         dialog.set_version(VERSION)
-        dialog.set_license('MIT License\n\n' + 'Copy of the license available at https://github.com/happyconcepts/bitshares-indicator/blob/master/LICENSE' )
+        dialog.set_license('MIT License\n\n' + ' A copy of the license is available at https://github.com/happyconcepts/bitshares-indicator/blob/master/LICENSE' )
         dialog.set_wrap_license(True)
 	dialog.set_copyright('Copyright 2018 Ben Bird.')
-	dialog.set_comments('Linux app indicator tracks bitshares price (BTS)\n\n'+'Donations gratefully accepted, pull requests too!\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
+	dialog.set_comments('Linux app indicator tracks bitshares price (BTS)\n\n'+'Donations appreciated!\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
 	dialog.set_website('http://www.buybts.com')   
 	pixbuf = Pixbuf.new_from_file_at_size("icons/bitshares.png", 40, 40)
 	dialog.set_logo(pixbuf)
