@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 # bitshares-indicator
+# copyright 2018 ben bird
+# https://github.com/happyconcepts/bitshares-indicator
 
 import os
 import requests 
@@ -19,10 +21,11 @@ from datetime import datetime
 
 VERSION 	= '0.2'
 APPID 		= 'bitshares-indicator'
-print "starting "+APPID +" v. " +VERSION
+
 
 class buyBTSindicator(object):
     
+    # constructor
     def __init__(self):
 	
 	self.ind = AppIndicator.Indicator.new(APPID,os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
@@ -76,7 +79,7 @@ class buyBTSindicator(object):
         dialog.set_license('MIT License\n\n' + 'Copy of the license available at https://github.com/happyconcepts/bitshares-indicator/blob/master/LICENSE' )
         dialog.set_wrap_license(True)
 	dialog.set_copyright('Copyright 2018 Ben Bird.')
-	dialog.set_comments('Linux app indicator tracks bitshares price (BTS)\n\n'+'Donations:\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin')
+	dialog.set_comments('Linux app indicator tracks bitshares price (BTS)\n\n'+'Donations gratefully accepted, pull requests too!\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
 	dialog.set_website('http://www.buybts.com')   
 	pixbuf = Pixbuf.new_from_file_at_size("icons/bitshares.png", 40, 40)
 	dialog.set_logo(pixbuf)
@@ -121,10 +124,8 @@ class gate:
 	    self.last = round(json['last'],4)
             if chg[:1] != '-':
                 chg = "+"+ chg
-	    #return 'L: $'+str(round(json['last'],4)) +" 24h Ch: "+ chg +"% "
 	    return 'L: $'+str(self.last) +" 24h Ch: "+ chg +"% "
 
-    	
     def log(self):
 	return "$" +str(self.last)
 	
@@ -139,12 +140,13 @@ class binance:
         response = requests.get(url)
         json = response.json()
         if not json['price']:
-            return "ERR: binance (api): " + json['msg']
+            return "Error: binance (api): " + json['msg']
         else:
 	    return u'\u0E3F' + str(json['price'])
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal.SIG_DFL)
+    print "starting "+APPID +" v. "+VERSION
     ind = buyBTSindicator()
     ind.main()
 
