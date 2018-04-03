@@ -9,6 +9,10 @@ import signal
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GLib
+
+gi.require_version('GdkPixbuf', '2.0')
+from gi.repository.GdkPixbuf import Pixbuf
+
 gi.require_version('AppIndicator3', '0.1')
 from gi.repository import AppIndicator3 as AppIndicator
 from datetime import datetime
@@ -72,8 +76,10 @@ class buyBTSindicator(object):
         dialog.set_wrap_license(True)
 	dialog.set_copyright('Copyright 2018 Ben Bird.')
 	dialog.set_comments('This AppIndicator is for Linux systems using Unity.\n\n'+'The indicator tracks the price of Bitshares crypto.\n\n')
-	dialog.set_website('http://www.buybts.com')
-        dialog.run()
+	dialog.set_website('http://www.buybts.com')   
+	pixbuf = Pixbuf.new_from_file_at_size("icons/bitshares.png", 40, 40)
+	dialog.set_logo(pixbuf)
+	dialog.run()
         dialog.destroy()
 
     def price_update(self):
