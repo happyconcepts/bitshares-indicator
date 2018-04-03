@@ -84,15 +84,15 @@ class buyBTSindicator(object):
 		self.g = gate(self.symbol, self.base)
                 self.ind.set_label(self.g.run() + " /BTC: " + self.b.run() , "")
 		self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
-		print timestamp + " prices updated"
+		print timestamp + " BTS priced at " + self.g.log()
 	    else:
 		self.ind.set_label("Now in test mode.","")
 		print timestamp + " prices not updated (test mode)"
         except Exception as e:
-            #print(str(e))
-            self.ind.set_label("unable to update prices - check connection","")
+            print(str(e))
+            self.ind.set_label("price update failed!","")
 	    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bt_s.png")
-	    print timestamp + " prices not updated (probably no connection)"
+	    print timestamp + " prices not updated (check connection)"
         return True
 
     def main(self):
@@ -111,9 +111,16 @@ class gate:
             return "Gate says: " + json['message']
         else:
 	    chg = str(round(json['percentChange'],1))
+	    self.last = round(json['last'],4)
             if chg[:1] != '-':
                 chg = "+"+ chg
-	    return 'L: $'+str(round(json['last'],4)) +" 24h Ch: "+ chg +"% "
+	    #return 'L: $'+str(round(json['last'],4)) +" 24h Ch: "+ chg +"% "
+	    return 'L: $'+str(self.last) +" 24h Ch: "+ chg +"% "
+
+    	
+    def log(self):
+	return "$" +str(self.last)
+	
 
 class binance:
     def __init__(self, coin='BTS', base='BTC'):
