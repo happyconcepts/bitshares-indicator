@@ -17,14 +17,14 @@ gi.require_version('AppIndicator3', '0.1')
 from gi.repository import AppIndicator3 as AppIndicator
 from datetime import datetime
 
-VERSION 	= '0.1'
+VERSION 	= '0.2'
 APPID 		= 'bitshares-indicator'
 print "starting "+APPID +" v. " +VERSION
 
 class buyBTSindicator(object):
     
     def __init__(self):
-	signal.signal(signal.SIGINT, signal.SIG_DFL)
+	
 	self.ind = AppIndicator.Indicator.new(APPID,os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
         )
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
@@ -70,12 +70,13 @@ class buyBTSindicator(object):
 
     def about(source, evt):
         dialog = Gtk.AboutDialog()
-        dialog.set_program_name('Bitshares Indicator')
-        dialog.set_version('0.1')
-        dialog.set_license('MIT License\n\n' + 'Copy of the license available upon request' )
+	dialog.set_border_width(10)
+        dialog.set_program_name('bitshares-indicator')
+        dialog.set_version(VERSION)
+        dialog.set_license('MIT License\n\n' + 'Copy of the license available at https://github.com/happyconcepts/bitshares-indicator/blob/master/LICENSE' )
         dialog.set_wrap_license(True)
 	dialog.set_copyright('Copyright 2018 Ben Bird.')
-	dialog.set_comments('This AppIndicator is for Linux systems using Unity.\n\n'+'The indicator tracks the price of Bitshares crypto.\n\n')
+	dialog.set_comments('Linux app indicator tracks bitshares price (BTS)\n\n'+'Donations:\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin')
 	dialog.set_website('http://www.buybts.com')   
 	pixbuf = Pixbuf.new_from_file_at_size("icons/bitshares.png", 40, 40)
 	dialog.set_logo(pixbuf)
@@ -143,6 +144,7 @@ class binance:
 	    return u'\u0E3F' + str(json['price'])
 
 if __name__ == "__main__":
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
     ind = buyBTSindicator()
     ind.main()
 
