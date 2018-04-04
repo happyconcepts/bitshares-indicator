@@ -4,6 +4,9 @@
 # copyright 2018 ben bird
 # https://github.com/happyconcepts/bitshares-indicator
 
+VERSION 	= '0.3'
+APPID 		= 'bitshares-indicator'
+
 import os
 import requests 
 import gi
@@ -20,22 +23,19 @@ from gi.repository import AppIndicator3 as AppIndicator
 
 from datetime import datetime
 
-VERSION 	= '0.2'
-APPID 		= 'bitshares-indicator'
-
-
 class buyBTSindicator(object):
-    
     # constructor
     def __init__(self):
-	self.ind = AppIndicator.Indicator.new(APPID,os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
+	self.ind = AppIndicator.Indicator.new(APPID,
+	os.path.dirname(os.path.realpath(__file__)) +
+	"/icons/bts.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
         )
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 	self.test = False
 	# update interval (minutes):
 	self.interval = 5  
         self.symbol = 'BTS'
-	self.base = 'USDT'
+	self.base = 'USDT' # usd, eur, cny
 	self.menu = Gtk.Menu()
 	self.build_menu()
         self.price_update()
@@ -54,7 +54,13 @@ class buyBTSindicator(object):
         item_about.show()
         self.menu.append(item_about)
 
-        item = Gtk.MenuItem()
+	item_base = Gtk.MenuItem()
+        item_base.set_label("Set Base")
+	item_base.connect("activate", self.set_base)
+        item_base.show()
+        self.menu.append(item_base)
+
+	item = Gtk.MenuItem()
         item.set_label("Exit")
         item.connect("activate", self.handler_menu_exit)
         item.show()
@@ -63,10 +69,15 @@ class buyBTSindicator(object):
         self.menu.show()
         self.ind.set_menu(self.menu)
 
+    def set_base (self, source):
+	win = SetBaseWindow()
+	win.connect("destroy", Gtk.main_quit)
+	win.show_all()
+
     @staticmethod
     def handler_menu_exit(evt):
         Gtk.main_quit()
-	print  APPID +" has quit"
+	print APPID +" has quit"
 
     def handler_menu_reload(self, evt):
         self.price_update()
@@ -144,6 +155,32 @@ class binance:
         else:
 	    return u'\u0E3F' + str(json['price'])
 
+class SetBaseWindow(Gtk.Window):
+    def __init__(self):
+        Gtk.Window.__init__(self, title="Set Value Base")
+        self.set_border_width(15)
+	self.set_default_size(300, 50)
+	self.set_position(Gtk.WindowPosition.CENTER)
+        hbox = Gtk.Box(spacing=6)
+        self.add(hbox);
+
+	label = Gtk.Label("Choose your base:")
+        hbox.pack_start(label, False, False, 0)
+        button1 = Gtk.RadioButton.new_with_label_from_widget(None, "$ USD")
+        button1.connect("clicked", self.change_base, "USDT")
+	hbox.pack_start(button1, False, False, 0)
+
+        button2 = Gtk.RadioButton.new_from_widget(button1)
+        button2.set_label("Euro")
+        button2.connect("clicked", self.change_base, "EUR")
+        hbox.pack_start(button2, False, False, 0)
+
+    def change_base(self, button, name):
+	if button.get_active():
+	    ind.base = name
+            print("base set: " +ind.base)
+
+  
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     print "starting "+APPID +" v. "+VERSION
