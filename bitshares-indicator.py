@@ -71,7 +71,7 @@ class buyBTSindicator(object):
 
     def set_base (self, source):
 	win = SetBaseWindow()
-	win.connect("destroy", Gtk.main_quit)
+	#win.connect("destroy", Gtk.main_quit)
 	win.show_all()
 
     @staticmethod
