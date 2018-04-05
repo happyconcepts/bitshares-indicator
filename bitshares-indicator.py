@@ -55,7 +55,7 @@ class buyBTSindicator(object):
         self.menu.append(item_about)
 
 	item_base = Gtk.MenuItem()
-        item_base.set_label("Set Base")
+        item_base.set_label("Settings")
 	item_base.connect("activate", self.set_base)
         item_base.show()
         self.menu.append(item_base)
@@ -157,9 +157,9 @@ class binance:
 
 class SetBaseWindow(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="Set Value Base")
+        Gtk.Window.__init__(self, title="Settings")
         self.set_border_width(15)
-	self.set_default_size(300, 50)
+	self.set_default_size(300, 60)
 	self.set_position(Gtk.WindowPosition.CENTER)
         hbox = Gtk.Box(spacing=6)
         self.add(hbox);
