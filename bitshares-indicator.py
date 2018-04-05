@@ -2,7 +2,7 @@
 # bitshares-indicator
 # copyright 2018 ben bird
 # https://github.com/happyconcepts/bitshares-indicator
-VERSION = '0.3'
+VERSION = '0.4'
 APPID 	= 'bitshares-indicator'
 
 import os
@@ -101,9 +101,17 @@ class buyBTSindicator(object):
 	    if not self.test:
 		self.b = binance(self.symbol)
 		self.g = gate(self.symbol, self.base)
-                self.ind.set_label(self.g.run() + " /BTC: " + self.b.run() , "")
-		self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
-		print timestamp + " BTS priced at " + self.g.log()
+		
+		if self.base =='EUR':
+		    self.c = coinmktcap(self.symbol, self.base)
+	     	    self.ind.set_label(self.c.run() + " /BTC: " + self.b.run() , "")
+		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
+		    print timestamp + " BTS priced at " + self.c.log()
+                else :
+		    self.ind.set_label(self.g.run() + " /BTC: " + self.b.run() , "")
+		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
+		    print timestamp + " BTS priced at " + self.g.log()
+
 	    else:
 		self.ind.set_label("Now in test mode.","")
 		print timestamp + " prices not updated (test mode)"
@@ -153,6 +161,31 @@ class binance:
         else:
 	    return u'\u0E3F' + str(json['price'])
 
+class coinmktcap:
+    def __init__(self, coin='bitshares', base='EUR'):
+        self.pair = coin + "/?convert=" + base
+        
+
+    def run(self):
+        url = 'https://api.coinmarketcap.com/v1/ticker/bitshares/?convert=EUR'
+	# https://api.coinmarketcap.com/v1/ticker/bitshares/?convert=EUR
+        response = requests.get(url)
+        json = response.json()
+	
+        if not json[0]['price_eur']:
+            return "Error: coinmarketcap (api): " + json[0]['error']
+        else:
+	    self.last = round(float(json[0]['price_eur']),4)
+	    self.chg = round(float(json[0]['percent_change_24h']),1)
+	    self.chg = str(self.chg)
+	    if self.chg[:1] != '-':
+                self.chg = "+"+ self.chg
+	    return 'L: '+ u'\u20AC' + str(self.last) +" 24h Ch: "+ self.chg +"% "
+
+
+    def log(self):
+	return  u'\u20AC' +str(self.last)
+
 class SetBaseWindow(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Settings")
@@ -182,7 +215,7 @@ class SetBaseWindow(Gtk.Window):
     def change_base(self, button, name):
 	if button.get_active():
 	    ind.base = name
-            print("base set: " +ind.base)
+            print("base is set to " +ind.base)
 
   
 if __name__ == "__main__":
