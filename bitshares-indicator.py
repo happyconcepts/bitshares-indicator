@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # bitshares-indicator
 # copyright 2018 ben bird
 # https://github.com/happyconcepts/bitshares-indicator
