@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 # bitshares-indicator
 # copyright 2018 ben bird
 # https://github.com/happyconcepts/bitshares-indicator
@@ -34,7 +35,7 @@ class buyBTSindicator(object):
 	# update interval (minutes):
 	self.interval = 5  
         self.symbol = 'BTS'
-	self.base = 'USDT' # usd, eur, cny
+	self.base = 'USD'
 	self.menu = Gtk.Menu()
 	self.build_menu()
         self.price_update()
@@ -69,16 +70,22 @@ class buyBTSindicator(object):
         self.ind.set_menu(self.menu)
 
     def set_base (self, source):
+
 	win = SetBaseWindow()
+
 	#win.connect("destroy", Gtk.main_quit)
+
 	win.show_all()
 
     @staticmethod
     def handler_menu_exit(evt):
+
         Gtk.main_quit()
-	print APPID +" has quit"
+
+	print APPID +" has quit."
 
     def handler_menu_reload(self, evt):
+
         self.price_update()
 
     def about(source, evt):
@@ -97,131 +104,220 @@ class buyBTSindicator(object):
         dialog.destroy()
 
     def price_update(self):
+
         timestamp = datetime.now().strftime('%m/%d %H:%M:%S')
+
 	try:
+
 	    if not self.test:
+
 		self.b = binance(self.symbol)
-		self.g = gate(self.symbol, self.base)
 		
 		if self.base =='EUR':
+
 		    self.c = coinmktcap(self.symbol, self.base)
+
 	     	    self.ind.set_label(self.c.run() + " /BTC: " + self.b.run() , "")
+
 		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
+
 		    print timestamp + " BTS priced at " + self.c.log()
+
                 else :
+
+		    self.g = gate(self.symbol, self.base)
+
 		    self.ind.set_label(self.g.run() + " /BTC: " + self.b.run() , "")
+
 		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
+
 		    print timestamp + " BTS priced at " + self.g.log()
 
 	    else:
+
 		self.ind.set_label("Now in test mode.","")
+
 		print timestamp + " prices not updated (test mode)"
+
         except Exception as e:
+
             self.ind.set_label("price update failed!","")
+
 	    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bt_s.png")
+
 	    print timestamp + " prices not updated (check connection)"
+
 	    print(str(e))
+
         return True
 
     def main(self):
+
         Gtk.main()
 
 class gate:
+
     def __init__(self, coin='bts', base='usdt'):
-        self.pair = coin +"_"+ base
+
+	if base == 'USD':
+
+	    base = 'USDT'    
+    
+	self.pair = coin +"_"+ base
+
         self.pair.lower()
 
     def run(self):
+
         url = 'http://data.gate.io/api2/1/ticker/'+self.pair
+
         response = requests.get(url)
+
         json = response.json()
+
         if not json['result']:
+
             return "Gate says: " + json['message']
+
         else:
 	    chg = str(round(json['percentChange'],1))
+
 	    self.last = round(json['last'],4)
+
             if chg[:1] != '-':
+
                 chg = "+"+ chg
+
 	    return 'L: $'+str(self.last) +" 24h Ch: "+ chg +"% "
 
     def log(self):
+
 	return "$" +str(self.last)
 	
 
 class binance:
+
     def __init__(self, coin='BTS', base='BTC'):
+
         self.pair = coin+base
+
         self.pair.upper()
 
     def run(self):
+
         url = 'https://api.binance.com/api/v3/ticker/price?symbol='+self.pair
+
         response = requests.get(url)
+
         json = response.json()
+
         if not json['price']:
-            return "Error: binance (api): " + json['msg']
+
+            return "Error: binance (api): "+ json['msg']
+
         else:
-	    return u'\u0E3F' + str(json['price'])
+
+	    return u'\u0E3F'+str(json['price'])
 
 class coinmktcap:
+
     def __init__(self, coin='bitshares', base='EUR'):
-        self.pair = coin + "/?convert=" + base
-        
+
+	if coin == 'BTS':
+
+	    coin = 'bitshares'  
+      
+	self.pair = coin +"/?convert="+base
 
     def run(self):
-        url = 'https://api.coinmarketcap.com/v1/ticker/bitshares/?convert=EUR'
+
+        url = 'https://api.coinmarketcap.com/v1/ticker/'+self.pair
 	# https://api.coinmarketcap.com/v1/ticker/bitshares/?convert=EUR
+
         response = requests.get(url)
+
         json = response.json()
 	
         if not json[0]['price_eur']:
+
             return "Error: coinmarketcap (api): " + json[0]['error']
+
         else:
+
 	    self.last = round(float(json[0]['price_eur']),4)
+
 	    self.chg = round(float(json[0]['percent_change_24h']),1)
+
 	    self.chg = str(self.chg)
+
 	    if self.chg[:1] != '-':
+
                 self.chg = "+"+ self.chg
+
 	    return 'L: '+ u'\u20AC' + str(self.last) +" 24h Ch: "+ self.chg +"% "
 
-
     def log(self):
-	return  u'\u20AC' +str(self.last)
+
+	return  u'\u20AC'+str(self.last)
 
 class SetBaseWindow(Gtk.Window):
+
     def __init__(self):
+
         Gtk.Window.__init__(self, title="Settings")
+
         self.set_border_width(15)
+
 	self.set_default_size(300, 60)
+
 	self.set_position(Gtk.WindowPosition.CENTER)
+
         hbox = Gtk.Box(spacing=6)
+
         self.add(hbox);
 
-	label = Gtk.Label("Choose your base:")
+	label = Gtk.Label("Set base currency:")
+
         hbox.pack_start(label, False, False, 0)
+
         button1 = Gtk.RadioButton.new_with_label_from_widget(None, "$ USD")
         
-	if ind.base == 'USDT':
+	if ind.base == 'USD':
+
 	    button1.set_active(True)
-	button1.connect("clicked", self.change_base, "USDT")
+
+	button1.connect("clicked", self.change_base, "USD")
+
 	hbox.pack_start(button1, False, False, 0)
 
         button2 = Gtk.RadioButton.new_from_widget(button1)
+
         button2.set_label(u'\u20AC' + " Euro")
         
 	if ind.base == 'EUR':
+
 	    button2.set_active(True)
+
         button2.connect("clicked", self.change_base, "EUR")
+
 	hbox.pack_start(button2, False, False, 0)
 
     def change_base(self, button, name):
+
 	if button.get_active():
+
 	    ind.base = name
+
             print("base is set to " +ind.base)
 
   
 if __name__ == "__main__":
+
     signal.signal(signal.SIGINT, signal.SIG_DFL)
+
     print "starting "+APPID +" v. "+VERSION
+
     ind = buyBTSindicator()
+
     ind.main()
 
