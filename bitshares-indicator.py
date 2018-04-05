@@ -29,7 +29,7 @@ class buyBTSindicator(object):
 	"/icons/bts.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
         )
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
-	self.test = True
+	self.test = False
 	# update interval (minutes):
 	self.interval = 5  
         self.symbol = 'BTS'
