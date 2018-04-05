@@ -173,7 +173,7 @@ class SetBaseWindow(Gtk.Window):
 	hbox.pack_start(button1, False, False, 0)
 
         button2 = Gtk.RadioButton.new_from_widget(button1)
-        button2.set_label("Euro")
+        button2.set_label(u'\u20AC' + " Euro")
         button2.connect("clicked", self.change_base, "EUR")
 	if ind.base == 'EUR':
 	    button2.set_active(True)
