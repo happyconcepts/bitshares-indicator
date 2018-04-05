@@ -1,11 +1,9 @@
 #!/usr/bin/env python
-
 # bitshares-indicator
 # copyright 2018 ben bird
 # https://github.com/happyconcepts/bitshares-indicator
-
-VERSION 	= '0.3'
-APPID 		= 'bitshares-indicator'
+VERSION = '0.3'
+APPID 	= 'bitshares-indicator'
 
 import os
 import requests 
@@ -31,7 +29,7 @@ class buyBTSindicator(object):
 	"/icons/bts.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
         )
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
-	self.test = False
+	self.test = True
 	# update interval (minutes):
 	self.interval = 5  
         self.symbol = 'BTS'
@@ -110,10 +108,10 @@ class buyBTSindicator(object):
 		self.ind.set_label("Now in test mode.","")
 		print timestamp + " prices not updated (test mode)"
         except Exception as e:
-            print(str(e))
             self.ind.set_label("price update failed!","")
 	    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bt_s.png")
 	    print timestamp + " prices not updated (check connection)"
+	    print(str(e))
         return True
 
     def main(self):
@@ -167,17 +165,19 @@ class SetBaseWindow(Gtk.Window):
 	label = Gtk.Label("Choose your base:")
         hbox.pack_start(label, False, False, 0)
         button1 = Gtk.RadioButton.new_with_label_from_widget(None, "$ USD")
-        button1.connect("clicked", self.change_base, "USDT")
+        
 	if ind.base == 'USDT':
 	    button1.set_active(True)
+	button1.connect("clicked", self.change_base, "USDT")
 	hbox.pack_start(button1, False, False, 0)
 
         button2 = Gtk.RadioButton.new_from_widget(button1)
         button2.set_label(u'\u20AC' + " Euro")
-        button2.connect("clicked", self.change_base, "EUR")
+        
 	if ind.base == 'EUR':
 	    button2.set_active(True)
-        hbox.pack_start(button2, False, False, 0)
+        button2.connect("clicked", self.change_base, "EUR")
+	hbox.pack_start(button2, False, False, 0)
 
     def change_base(self, button, name):
 	if button.get_active():
