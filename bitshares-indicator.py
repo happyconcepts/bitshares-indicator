@@ -75,7 +75,7 @@ class buyBTSindicator(object):
 
 	win.set_keep_above(True)
 
-	#win.connect("destroy", Gtk.main_quit)
+	win.connect("destroy", self.handler_menu_reload)
 
 	win.show_all()
 
