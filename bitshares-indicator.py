@@ -24,34 +24,53 @@ from gi.repository import AppIndicator3 as AppIndicator
 from datetime import datetime
 
 class buyBTSindicator(object):
-    # constructor
+
     def __init__(self):
+
 	self.ind = AppIndicator.Indicator.new(APPID,
 	os.path.dirname(os.path.realpath(__file__)) +
 	"/icons/bts.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
         )
+
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
+
 	self.test = False
+
 	# update interval (minutes):
 	self.interval = 5  
+
         self.symbol = 'BTS'
+
 	self.base = 'USD'
+
 	self.menu = Gtk.Menu()
+
 	self.build_menu()
+
         self.price_update()
+
         GLib.timeout_add_seconds(60 * self.interval, self.price_update)
 
     def build_menu(self):
+
         item_refresh = Gtk.MenuItem()
+
         item_refresh.set_label("Update Prices")
+
         item_refresh.connect("activate", self.handler_menu_reload)
+
         item_refresh.show()
+
         self.menu.append(item_refresh)
 
 	item_about = Gtk.MenuItem()
+
         item_about.set_label("About")
+
         item_about.connect("activate", self.about)
+
         item_about.show()
+
         self.menu.append(item_about)
 
 	item_base = Gtk.MenuItem()
@@ -67,6 +86,7 @@ class buyBTSindicator(object):
         self.menu.append(item)
 
         self.menu.show()
+
         self.ind.set_menu(self.menu)
 
     def set_base (self, source):
@@ -131,21 +151,21 @@ class buyBTSindicator(object):
 
 		    self.c = coinmktcap(self.symbol, self.base)
 
-	     	    self.ind.set_label(self.c.run() + " /BTC: "+ self.b.run() , "")
+	     	    self.ind.set_label(self.c.run() + " ~BTC: "+ self.b.run() , "")
 
 		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
 
-		    print timestamp + " BTS priced at "+ self.c.log()
+		    print timestamp + " BTS price: "+ self.c.price()
 
                 else :
 
 		    self.g = gate(self.symbol, self.base)
 
-		    self.ind.set_label(self.g.run() + " /BTC: "+ self.b.run() , "")
+		    self.ind.set_label(self.g.run() + " ~BTC: "+ self.b.run() , "")
 
 		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
 
-		    print timestamp + " BTS priced at " + self.g.log()
+		    print timestamp + " BTS price: "+ self.g.price()
 
 	    else:
 
@@ -202,9 +222,9 @@ class gate:
 
                 chg = "+"+ chg
 
-	    return 'L: $'+str(self.last) +" 24h Ch: "+ chg +"% "
+	    return 'Last: $'+str(self.last) + " " +chg +"% (24h)"
 
-    def log(self):
+    def price(self):
 
 	return "$" +str(self.last)
 	
@@ -268,9 +288,9 @@ class coinmktcap:
 
                 self.chg = "+"+ self.chg
 
-	    return 'L: '+ u'\u20AC' + str(self.last) +" 24h Ch: "+ self.chg +"% "
+	    return 'Last: '+ u'\u20AC' + str(self.last) + " "+ self.chg +"% (24h)"
 
-    def log(self):
+    def price(self):
 
 	return  u'\u20AC'+str(self.last)
 
