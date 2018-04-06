@@ -4,7 +4,7 @@
 # bitshares-indicator
 # copyright 2018 ben bird
 # https://github.com/happyconcepts/bitshares-indicator
-VERSION = '0.4'
+VERSION = '0.4 dev'
 APPID 	= 'bitshares-indicator'
 
 import os
@@ -310,7 +310,7 @@ class SetBaseWindow(Gtk.Window):
 
         self.add(hbox);
 
-	label = Gtk.Label("Set base currency:")
+	label = Gtk.Label("Base currency:")
 
         hbox.pack_start(label, False, False, 0)
 
