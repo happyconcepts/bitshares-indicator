@@ -73,6 +73,8 @@ class buyBTSindicator(object):
 
 	win = SetBaseWindow()
 
+	win.set_keep_above(True)
+
 	#win.connect("destroy", Gtk.main_quit)
 
 	win.show_all()
@@ -89,18 +91,30 @@ class buyBTSindicator(object):
         self.price_update()
 
     def about(source, evt):
+
         dialog = Gtk.AboutDialog()
+
 	dialog.set_border_width(10)
+
         dialog.set_program_name('bitshares-indicator')
+
         dialog.set_version(VERSION)
+
         dialog.set_license('MIT License\n\n' + ' A copy of the license is available at https://github.com/happyconcepts/bitshares-indicator/blob/master/LICENSE' )
+
         dialog.set_wrap_license(True)
+
 	dialog.set_copyright('Copyright 2018 Ben Bird.')
+
 	dialog.set_comments('Linux app indicator tracks bitshares price (BTS)\n\n'+'Donations appreciated!\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
-	dialog.set_website('http://www.buybts.com')   
+	dialog.set_website('http://www.buybts.com')  
+ 
 	pixbuf = Pixbuf.new_from_file_at_size("icons/bitshares.png", 40, 40)
+
 	dialog.set_logo(pixbuf)
+
 	dialog.run()
+
         dialog.destroy()
 
     def price_update(self):
@@ -117,17 +131,17 @@ class buyBTSindicator(object):
 
 		    self.c = coinmktcap(self.symbol, self.base)
 
-	     	    self.ind.set_label(self.c.run() + " /BTC: " + self.b.run() , "")
+	     	    self.ind.set_label(self.c.run() + " /BTC: "+ self.b.run() , "")
 
 		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
 
-		    print timestamp + " BTS priced at " + self.c.log()
+		    print timestamp + " BTS priced at "+ self.c.log()
 
                 else :
 
 		    self.g = gate(self.symbol, self.base)
 
-		    self.ind.set_label(self.g.run() + " /BTC: " + self.b.run() , "")
+		    self.ind.set_label(self.g.run() + " /BTC: "+ self.b.run() , "")
 
 		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
 
