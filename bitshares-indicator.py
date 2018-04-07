@@ -405,11 +405,21 @@ class ListBoxWindow(Gtk.Window):
         combo = Gtk.ComboBoxText()
 
 	combo.connect("changed", self.change_interval)
-        combo.insert(0, "5", "5")
-        combo.insert(1, "10", "10")
-	combo.insert(2, "15", "15")
-	combo.insert(3, "60", "60")
-	combo.insert(4, "1", "1")
+
+        combo.insert(0, "1", "1")
+
+	combo.insert(1, "5", "5")
+
+        combo.insert(2, "10", "10")
+
+	combo.insert(3, "15", "15")
+
+	combo.insert(4, "30", "30")
+
+	combo.insert(5, "60", "60")
+
+	combo.insert(6, "240", "240")
+
         hbox.pack_start(label, True, True, 0)
         hbox.pack_start(combo, False, True, 0)
 
