@@ -86,7 +86,7 @@ class buyBTSindicator(object):
 
 	item = Gtk.MenuItem()
 
-        item.set_label("Exit")
+        item.set_label("Quit")
 
         item.connect("activate", self.handler_menu_exit)
 
