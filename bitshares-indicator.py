@@ -5,7 +5,7 @@
 # copyright 2018 ben bird
 # https://github.com/happyconcepts/bitshares-indicator
 
-VERSION = '0.4 dev'
+VERSION = '0.5'
 
 APPID 	= 'bitshares-indicator'
 
