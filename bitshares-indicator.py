@@ -79,6 +79,12 @@ class buyBTSindicator(object):
         item_base.show()
         self.menu.append(item_base)
 
+	item_settings = Gtk.MenuItem()
+        item_settings.set_label("Settings with List")
+	item_settings.connect("activate", self.set_list)
+        item_settings.show()
+        self.menu.append(item_settings)
+
 	item = Gtk.MenuItem()
         item.set_label("Exit")
         item.connect("activate", self.handler_menu_exit)
@@ -92,6 +98,16 @@ class buyBTSindicator(object):
     def set_base (self, source):
 
 	win = SetBaseWindow()
+
+	win.set_keep_above(True)
+
+	win.connect("destroy", self.handler_menu_reload)
+
+	win.show_all()
+
+    def set_list (self, source):
+
+	win = ListBoxWindow()
 
 	win.set_keep_above(True)
 
@@ -189,6 +205,8 @@ class buyBTSindicator(object):
 
         Gtk.main()
 
+
+
 class gate:
 
     def __init__(self, coin='bts', base='usdt'):
@@ -262,6 +280,7 @@ class coinmktcap:
 	    coin = 'bitshares'  
       
 	self.pair = coin +"/?convert="+base
+	self.base = base
 
     def run(self):
 
@@ -271,14 +290,15 @@ class coinmktcap:
         response = requests.get(url)
 
         json = response.json()
-	
-        if not json[0]['price_eur']:
-
+	self.cmcfield = 'price_'+self.base.lower() # price_eur
+	print 'coinmc: ' +self.cmcfield
+        #if not json[0]['price_eur']:
+	if not json[0][self.cmcfield]:
             return "Error: coinmarketcap (api): " + json[0]['error']
 
         else:
 
-	    self.last = round(float(json[0]['price_eur']),4)
+	    self.last = round(float(json[0][self.cmcfield]),4)
 
 	    self.chg = round(float(json[0]['percent_change_24h']),1)
 
@@ -300,7 +320,7 @@ class SetBaseWindow(Gtk.Window):
 
         Gtk.Window.__init__(self, title="Settings")
 
-        self.set_border_width(15)
+        self.set_border_width(10)
 
 	self.set_default_size(300, 60)
 
@@ -335,6 +355,117 @@ class SetBaseWindow(Gtk.Window):
         button2.connect("clicked", self.change_base, "EUR")
 
 	hbox.pack_start(button2, False, False, 0)
+
+    def change_base(self, button, name):
+
+	if button.get_active():
+
+	    ind.base = name
+
+            print("base is set to " +ind.base)
+
+
+class ListBoxWindow(Gtk.Window):
+
+    def __init__(self):
+        Gtk.Window.__init__(self, title="Settings")
+        self.set_position(Gtk.WindowPosition.CENTER)
+	self.set_border_width(10)
+
+        box_outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        self.add(box_outer)
+
+        listbox = Gtk.ListBox()
+        listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        box_outer.pack_start(listbox, True, True, 0)
+
+        
+	row = Gtk.ListBoxRow()
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
+        row.add(hbox)
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=50)
+        hbox.pack_start(vbox, True, True, 0)
+
+        label1 = Gtk.Label("Automatic Updates", xalign=0)
+
+        #label2 = Gtk.Label("(requires internet access)", xalign=0)
+
+        vbox.pack_start(label1, True, True, 0)
+
+        #vbox.pack_start(label2, True, True, 0)
+
+        switch = Gtk.Switch()
+
+        switch.props.valign = Gtk.Align.CENTER
+
+        hbox.pack_start(switch, False, True, 0)
+
+        listbox.add(row)
+
+
+	row = Gtk.ListBoxRow()
+        
+	hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
+
+        row.add(hbox)
+
+	label = Gtk.Label("Base currency:", xalign=0)
+
+        button1 = Gtk.RadioButton.new_with_label_from_widget(None, "$ USD")
+        
+	if ind.base == 'USD':
+
+	    button1.set_active(True)
+
+	button1.connect("clicked", self.change_base, "USD")
+
+	hbox.pack_start(label, False, False, 0)
+
+	hbox.pack_start(button1, False, False, 0)
+
+	button2 = Gtk.RadioButton.new_from_widget(button1)
+
+        button2.set_label(u'\u20AC' +" Euro")
+        
+	if ind.base == 'EUR':
+
+	    button2.set_active(True)
+
+        button2.connect("clicked", self.change_base, "EUR")
+
+	hbox.pack_start(button2, False, False, 0)
+
+	listbox.add(row)
+
+
+
+        row = Gtk.ListBoxRow()
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
+        row.add(hbox)
+        label = Gtk.Label("Update interval, minutes", xalign=0)
+        combo = Gtk.ComboBoxText()
+        combo.insert(0, "300", "5")
+        combo.insert(1, "600", "10")
+	combo.insert(2, "900", "15")
+	combo.insert(3, "3600", "60")
+        hbox.pack_start(label, True, True, 0)
+        hbox.pack_start(combo, False, True, 0)
+
+        listbox.add(row)
+
+
+
+
+
+
+
+
+        listbox_2 = Gtk.ListBox()
+        
+        #listbox_2.connect('row-activated', lambda widget, row: print (row.data))
+        
+        box_outer.pack_start(listbox_2, True, True, 0)
+        listbox_2.show_all()
 
     def change_base(self, button, name):
 
