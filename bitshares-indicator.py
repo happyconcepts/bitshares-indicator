@@ -75,14 +75,9 @@ class buyBTSindicator(object):
 
         self.menu.append(item_about)
 
-	item_base = Gtk.MenuItem()
-        item_base.set_label("Settings")
-	item_base.connect("activate", self.set_base)
-        item_base.show()
-        self.menu.append(item_base)
 
 	item_settings = Gtk.MenuItem()
-        item_settings.set_label("Settings with List")
+        item_settings.set_label("Settings")
 	item_settings.connect("activate", self.set_list)
         item_settings.show()
         self.menu.append(item_settings)
@@ -97,15 +92,6 @@ class buyBTSindicator(object):
 
         self.ind.set_menu(self.menu)
 
-    def set_base (self, source):
-
-	win = SetBaseWindow()
-
-	win.set_keep_above(True)
-
-	win.connect("destroy", self.handler_menu_reload)
-
-	win.show_all()
 
     def set_list (self, source):
 
@@ -147,7 +133,7 @@ class buyBTSindicator(object):
 	dialog.set_comments('Linux app indicator tracks bitshares price (BTS)\n\n'+'Donations appreciated!\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
 	dialog.set_website('http://www.buybts.com')  
  
-	pixbuf = Pixbuf.new_from_file_at_size("icons/bitshares.png", 40, 40)
+	pixbuf = Pixbuf.new_from_file_at_size("icons/bitshares.png", 45, 45)
 
 	dialog.set_logo(pixbuf)
 
@@ -173,8 +159,8 @@ class buyBTSindicator(object):
 
 		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
 
-		    #print timestamp + " BTS price: "+ self.c.price()
-		    print timestamp + " BTS price: "+ self.c.price() + " and interval: " + str(self.interval)
+		    print timestamp + " BTS price: "+ self.c.price()
+		    #print timestamp + " BTS price: "+ self.c.price() + " and interval: " + str(self.interval)
 
                 else :
 
@@ -184,13 +170,15 @@ class buyBTSindicator(object):
 
 		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
 
-		    #print timestamp + " BTS price: "+ self.g.price()
-		    print timestamp + " BTS price: "+ self.g.price() + " and interval: " + str(self.interval)
+		    print timestamp + " BTS price: "+ self.g.price()
+		    #print timestamp + " BTS price: "+ self.g.price() + " and interval: " + str(self.interval)
 	    else:
 
 		self.ind.set_label("Now in test mode.","")
 
 		print timestamp + " prices not updated (test mode)"
+
+		print "update interval is " + str(self.interval) + " min"
 
         except Exception as e:
 
@@ -283,6 +271,7 @@ class coinmktcap:
 	    coin = 'bitshares'  
       
 	self.pair = coin +"/?convert="+base
+
 	self.base = base
 
     def run(self):
@@ -293,10 +282,11 @@ class coinmktcap:
         response = requests.get(url)
 
         json = response.json()
+
 	self.cmcfield = 'price_'+self.base.lower() # price_eur
-	#print 'coinmc: ' +self.cmcfield
-        #if not json[0]['price_eur']:
+
 	if not json[0][self.cmcfield]:
+
             return "Error: coinmarketcap (api): " + json[0]['error']
 
         else:
@@ -317,86 +307,47 @@ class coinmktcap:
 
 	return  u'\u20AC'+str(self.last)
 
-class SetBaseWindow(Gtk.Window):
-
-    def __init__(self):
-
-        Gtk.Window.__init__(self, title="Settings")
-
-        self.set_border_width(10)
-
-	self.set_default_size(300, 60)
-
-	self.set_position(Gtk.WindowPosition.CENTER)
-
-        hbox = Gtk.Box(spacing=6)
-
-        self.add(hbox);
-
-	label = Gtk.Label("Base currency:")
-
-        hbox.pack_start(label, False, False, 0)
-
-        button1 = Gtk.RadioButton.new_with_label_from_widget(None, "$ USD")
-        
-	if ind.base == 'USD':
-
-	    button1.set_active(True)
-
-	button1.connect("clicked", self.change_base, "USD")
-
-	hbox.pack_start(button1, False, False, 0)
-
-        button2 = Gtk.RadioButton.new_from_widget(button1)
-
-        button2.set_label(u'\u20AC' + " Euro")
-        
-	if ind.base == 'EUR':
-
-	    button2.set_active(True)
-
-        button2.connect("clicked", self.change_base, "EUR")
-
-	hbox.pack_start(button2, False, False, 0)
-
-    def change_base(self, button, name):
-
-	if button.get_active():
-
-	    ind.base = name
-
-            print("base is set to " +ind.base)
-
 
 class ListBoxWindow(Gtk.Window):
 
     def __init__(self):
+
         Gtk.Window.__init__(self, title="Settings")
+
 	self.set_default_size(300, 200)
+
         self.set_position(Gtk.WindowPosition.CENTER)
+
 	self.set_border_width(10)
 
         box_outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+
         self.add(box_outer)
 
         listbox = Gtk.ListBox()
+
         listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+
         box_outer.pack_start(listbox, True, True, 0)
 
         
 	row = Gtk.ListBoxRow()
+
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
+
         row.add(hbox)
+
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=50)
+
         hbox.pack_start(vbox, True, True, 0)
 
         label1 = Gtk.Label("Automatic Updates", xalign=0)
 
-        #label2 = Gtk.Label("(requires internet access)", xalign=0)
+        label2 = Gtk.Label("PRICE SETTINGS", xalign=0)
 
         vbox.pack_start(label1, True, True, 0)
 
-        #vbox.pack_start(label2, True, True, 0)
+        vbox.pack_start(label2, True, True, 0)
 
         switch = Gtk.Switch()
 
@@ -444,10 +395,15 @@ class ListBoxWindow(Gtk.Window):
 
 
         row = Gtk.ListBoxRow()
+
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
+
         row.add(hbox)
+
         label = Gtk.Label("Update interval, minutes", xalign=0)
+
         combo = Gtk.ComboBoxText()
+
 	combo.connect("changed", self.change_interval)
         combo.insert(0, "5", "5")
         combo.insert(1, "10", "10")
