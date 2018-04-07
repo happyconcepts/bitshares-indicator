@@ -426,16 +426,10 @@ class ListBoxWindow(Gtk.Window):
         listbox.add(row)
 
 
-
-
-
-
-
-
         listbox_2 = Gtk.ListBox()
-        
+	# list something here
         #listbox_2.connect('row-activated', lambda widget, row: print (row.data))
-        
+    
         box_outer.pack_start(listbox_2, True, True, 0)
         listbox_2.show_all()
 
@@ -458,15 +452,16 @@ class ListBoxWindow(Gtk.Window):
             print ("interval was " +str(ind.interval))
 
 	    try:
-	    #if GLib.source_remove(ind.testid):
-		GLib.source_remove(ind.testid)
-		print ("old timeout removed")
+	        GLib.source_remove(ind.testid)
+		#print ("old timeout removed")
 		ind.interval = self.interval_new
 		ind.testid = GLib.timeout_add_seconds(60 * int(ind.interval), ind.price_update)
-	        print ("new timeout id# " +str(ind.testid))
-		print ("interval now is " +str(ind.interval))
+	        #print ("new timeout id# " +str(ind.testid))
+		#print ("interval now is " +str(ind.interval))
+	    
 	    except Exception as e:
-		print e
+
+		print ("could not change update interval")
   
 if __name__ == "__main__":
 
