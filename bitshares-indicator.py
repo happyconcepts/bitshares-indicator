@@ -4,7 +4,9 @@
 # bitshares-indicator
 # copyright 2018 ben bird
 # https://github.com/happyconcepts/bitshares-indicator
+
 VERSION = '0.4 dev'
+
 APPID 	= 'bitshares-indicator'
 
 import os
@@ -36,7 +38,6 @@ class buyBTSindicator(object):
 
 	self.test = False
 
-	# update interval (minutes):
 	self.interval = 5  
 
         self.symbol = 'BTS'
@@ -50,8 +51,6 @@ class buyBTSindicator(object):
         self.price_update()
 
         self.testid = GLib.timeout_add_seconds(60 * self.interval, self.price_update)
-
-	print ("timeout set with id#"+str(self.testid))
 
     def build_menu(self):
 
@@ -75,17 +74,24 @@ class buyBTSindicator(object):
 
         self.menu.append(item_about)
 
-
 	item_settings = Gtk.MenuItem()
+
         item_settings.set_label("Settings")
+
 	item_settings.connect("activate", self.set_list)
+
         item_settings.show()
+
         self.menu.append(item_settings)
 
 	item = Gtk.MenuItem()
+
         item.set_label("Exit")
+
         item.connect("activate", self.handler_menu_exit)
+
         item.show()
+
         self.menu.append(item)
 
         self.menu.show()
@@ -130,7 +136,7 @@ class buyBTSindicator(object):
 
 	dialog.set_copyright('Copyright 2018 Ben Bird.')
 
-	dialog.set_comments('Linux app indicator tracks bitshares price (BTS)\n\n'+'Donations appreciated!\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
+	dialog.set_comments('The ~only~ Desktop App indicator you will need to track the price of Bitshares (BTS)\n\n'+'Donations appreciated!\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
 	dialog.set_website('http://www.buybts.com')  
  
 	pixbuf = Pixbuf.new_from_file_at_size("icons/bitshares.png", 45, 45)
@@ -160,7 +166,6 @@ class buyBTSindicator(object):
 		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
 
 		    print timestamp + " BTS price: "+ self.c.price()
-		    #print timestamp + " BTS price: "+ self.c.price() + " and interval: " + str(self.interval)
 
                 else :
 
@@ -171,7 +176,7 @@ class buyBTSindicator(object):
 		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
 
 		    print timestamp + " BTS price: "+ self.g.price()
-		    #print timestamp + " BTS price: "+ self.g.price() + " and interval: " + str(self.interval)
+		    
 	    else:
 
 		self.ind.set_label("Now in test mode.","")
@@ -277,7 +282,6 @@ class coinmktcap:
     def run(self):
 
         url = 'https://api.coinmarketcap.com/v1/ticker/'+self.pair
-	# https://api.coinmarketcap.com/v1/ticker/bitshares/?convert=EUR
 
         response = requests.get(url)
 
@@ -329,7 +333,6 @@ class ListBoxWindow(Gtk.Window):
         listbox.set_selection_mode(Gtk.SelectionMode.NONE)
 
         box_outer.pack_start(listbox, True, True, 0)
-
         
 	row = Gtk.ListBoxRow()
 
@@ -393,7 +396,6 @@ class ListBoxWindow(Gtk.Window):
 	listbox.add(row)
 
 
-
         row = Gtk.ListBoxRow()
 
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
@@ -449,16 +451,14 @@ class ListBoxWindow(Gtk.Window):
 
         if self.interval_new is not None:
 
-            print ("interval was " +str(ind.interval))
-
 	    try:
+
 	        GLib.source_remove(ind.testid)
-		#print ("old timeout removed")
+
 		ind.interval = self.interval_new
+
 		ind.testid = GLib.timeout_add_seconds(60 * int(ind.interval), ind.price_update)
-	        #print ("new timeout id# " +str(ind.testid))
-		#print ("interval now is " +str(ind.interval))
-	    
+
 	    except Exception as e:
 
 		print ("could not change update interval")
