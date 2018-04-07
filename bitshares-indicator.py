@@ -49,7 +49,9 @@ class buyBTSindicator(object):
 
         self.price_update()
 
-        GLib.timeout_add_seconds(60 * self.interval, self.price_update)
+        self.testid = GLib.timeout_add_seconds(60 * self.interval, self.price_update)
+
+	print ("timeout set with id#"+str(self.testid))
 
     def build_menu(self):
 
@@ -171,7 +173,8 @@ class buyBTSindicator(object):
 
 		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
 
-		    print timestamp + " BTS price: "+ self.c.price()
+		    #print timestamp + " BTS price: "+ self.c.price()
+		    print timestamp + " BTS price: "+ self.c.price() + " and interval: " + str(self.interval)
 
                 else :
 
@@ -181,8 +184,8 @@ class buyBTSindicator(object):
 
 		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
 
-		    print timestamp + " BTS price: "+ self.g.price()
-
+		    #print timestamp + " BTS price: "+ self.g.price()
+		    print timestamp + " BTS price: "+ self.g.price() + " and interval: " + str(self.interval)
 	    else:
 
 		self.ind.set_label("Now in test mode.","")
@@ -291,7 +294,7 @@ class coinmktcap:
 
         json = response.json()
 	self.cmcfield = 'price_'+self.base.lower() # price_eur
-	print 'coinmc: ' +self.cmcfield
+	#print 'coinmc: ' +self.cmcfield
         #if not json[0]['price_eur']:
 	if not json[0][self.cmcfield]:
             return "Error: coinmarketcap (api): " + json[0]['error']
@@ -369,10 +372,11 @@ class ListBoxWindow(Gtk.Window):
 
     def __init__(self):
         Gtk.Window.__init__(self, title="Settings")
+	self.set_default_size(300, 200)
         self.set_position(Gtk.WindowPosition.CENTER)
 	self.set_border_width(10)
 
-        box_outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        box_outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(box_outer)
 
         listbox = Gtk.ListBox()
@@ -405,7 +409,7 @@ class ListBoxWindow(Gtk.Window):
 
 	row = Gtk.ListBoxRow()
         
-	hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
+	hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
 
         row.add(hbox)
 
@@ -444,10 +448,12 @@ class ListBoxWindow(Gtk.Window):
         row.add(hbox)
         label = Gtk.Label("Update interval, minutes", xalign=0)
         combo = Gtk.ComboBoxText()
-        combo.insert(0, "300", "5")
-        combo.insert(1, "600", "10")
-	combo.insert(2, "900", "15")
-	combo.insert(3, "3600", "60")
+	combo.connect("changed", self.change_interval)
+        combo.insert(0, "5", "5")
+        combo.insert(1, "10", "10")
+	combo.insert(2, "15", "15")
+	combo.insert(3, "60", "60")
+	combo.insert(4, "1", "1")
         hbox.pack_start(label, True, True, 0)
         hbox.pack_start(combo, False, True, 0)
 
@@ -475,6 +481,26 @@ class ListBoxWindow(Gtk.Window):
 
             print("base is set to " +ind.base)
 
+    def change_interval(self, combo):
+
+	self.interval_current = str(ind.interval)
+
+	self.interval_new = combo.get_active_text()
+
+        if self.interval_new is not None:
+
+            print ("interval was " +str(ind.interval))
+
+	    try:
+	    #if GLib.source_remove(ind.testid):
+		GLib.source_remove(ind.testid)
+		print ("old timeout removed")
+		ind.interval = self.interval_new
+		ind.testid = GLib.timeout_add_seconds(60 * int(ind.interval), ind.price_update)
+	        print ("new timeout id# " +str(ind.testid))
+		print ("interval now is " +str(ind.interval))
+	    except Exception as e:
+		print e
   
 if __name__ == "__main__":
 
