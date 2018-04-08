@@ -76,7 +76,7 @@ class buyBTSindicator(object):
 
 	item_settings = Gtk.MenuItem()
 
-        item_settings.set_label("Settings")
+        item_settings.set_label("Settings...")
 
 	item_settings.connect("activate", self.set_list)
 
@@ -86,7 +86,7 @@ class buyBTSindicator(object):
 
 	item = Gtk.MenuItem()
 
-        item.set_label("Quit")
+        item.set_label("Exit")
 
         item.connect("activate", self.handler_menu_exit)
 
@@ -318,7 +318,7 @@ class ListBoxWindow(Gtk.Window):
 
         Gtk.Window.__init__(self, title="Settings")
 
-	self.set_default_size(300, 200)
+	self.set_default_size(300, 140)
 
         self.set_position(Gtk.WindowPosition.CENTER)
 
@@ -346,15 +346,17 @@ class ListBoxWindow(Gtk.Window):
 
         label1 = Gtk.Label("Automatic Updates", xalign=0)
 
-        label2 = Gtk.Label("PRICE SETTINGS", xalign=0)
+        #label2 = Gtk.Label("PRICE SETTINGS", xalign=0)
 
         vbox.pack_start(label1, True, True, 0)
 
-        vbox.pack_start(label2, True, True, 0)
+        #vbox.pack_start(label2, True, True, 0)
 
         switch = Gtk.Switch()
 
         switch.props.valign = Gtk.Align.CENTER
+
+	switch.set_active(True)
 
         hbox.pack_start(switch, False, True, 0)
 
@@ -367,6 +369,9 @@ class ListBoxWindow(Gtk.Window):
 
         row.add(hbox)
 
+	vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=50)
+        hbox.pack_start(vbox, True, True, 0)
+
 	label = Gtk.Label("Base currency:", xalign=0)
 
         button1 = Gtk.RadioButton.new_with_label_from_widget(None, "$ USD")
@@ -377,7 +382,8 @@ class ListBoxWindow(Gtk.Window):
 
 	button1.connect("clicked", self.change_base, "USD")
 
-	hbox.pack_start(label, False, False, 0)
+	vbox.pack_start(label, True, True, 0)
+	#hbox.pack_start(label, False, False, 0)
 
 	hbox.pack_start(button1, False, False, 0)
 
@@ -402,7 +408,7 @@ class ListBoxWindow(Gtk.Window):
 
         row.add(hbox)
 
-        label = Gtk.Label("Update interval, minutes", xalign=0)
+        label3 = Gtk.Label("Update interval, minutes", xalign=0)
 
         combo = Gtk.ComboBoxText()
 
@@ -454,7 +460,7 @@ class ListBoxWindow(Gtk.Window):
 
 	    pass
 
-        hbox.pack_start(label, True, True, 0)
+        hbox.pack_start(label3, True, True, 0)
 
         hbox.pack_start(combo, False, True, 0)
 
