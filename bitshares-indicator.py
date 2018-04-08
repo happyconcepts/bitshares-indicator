@@ -5,7 +5,7 @@
 # copyright 2018 ben bird
 # https://github.com/happyconcepts/bitshares-indicator
 
-VERSION = '0.5'
+VERSION = '0.51'
 
 APPID 	= 'bitshares-indicator'
 
@@ -422,7 +422,40 @@ class ListBoxWindow(Gtk.Window):
 
 	combo.insert(6, "240", "240")
 
+	if ind.interval == 1:
+
+	    combo.set_active(0)
+
+	elif ind.interval == 5:
+
+	    combo.set_active(1)
+
+	elif ind.interval == 10:
+
+	    combo.set_active(2)
+
+	elif ind.interval == 15:
+
+	    combo.set_active(3)
+
+	elif ind.interval == 30:
+
+	    combo.set_active(4)
+
+	elif ind.interval == 60:
+
+	    combo.set_active(5)
+
+	elif ind.interval == 240:
+
+	    combo.set_active(6)
+
+	else:
+
+	    pass
+
         hbox.pack_start(label, True, True, 0)
+
         hbox.pack_start(combo, False, True, 0)
 
         listbox.add(row)
@@ -455,9 +488,9 @@ class ListBoxWindow(Gtk.Window):
 
 	        GLib.source_remove(ind.testid)
 
-		ind.interval = self.interval_new
+		ind.interval = int(self.interval_new)
 
-		ind.testid = GLib.timeout_add_seconds(60 * int(ind.interval), ind.price_update)
+		ind.testid = GLib.timeout_add_seconds(60 * ind.interval, ind.price_update)
 
 	    except Exception as e:
 
