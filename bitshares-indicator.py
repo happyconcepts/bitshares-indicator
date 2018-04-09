@@ -6,7 +6,7 @@
 # mit license ~ open source software 
 
 
-VERSION = '0.51'
+VERSION = '0.55'
 
 APPID 	= 'bitshares-indicator'
 
@@ -143,7 +143,7 @@ class buyBTSindicator(object):
 
 	dialog.set_copyright('Copyright 2018 Ben Bird')
 
-	dialog.set_comments('The ~only~ Desktop App indicator you will need to track the price of Bitshares (BTS)\n\n'+'Donations appreciated!\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
+	dialog.set_comments('Track Bitshares prices on your Linux desktop\n\n'+'Donations appreciated!\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
 	dialog.set_website('http://www.buybts.com')  
  
 	pixbuf = Pixbuf.new_from_file_at_size("icons/bitshares.png", 45, 45)
@@ -346,6 +346,7 @@ class SettingsWindow(Gtk.Window):
 	switch.set_active(True)
 
 	hbox.pack_start(label1, True, True, 0)
+
         hbox.pack_start(switch, False, True, 0)
 
 	box_outer.pack_start(hbox, True, True, 0)
@@ -377,6 +378,7 @@ class SettingsWindow(Gtk.Window):
         button2.connect("clicked", self.change_base, "EUR")
 
 	hbox.pack_start(button2, False, False, 0)
+
 	box_outer.pack_start(hbox, True, True, 0)
 
 	hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
@@ -474,12 +476,8 @@ class SettingsWindow(Gtk.Window):
 
 
 if __name__ == "__main__":
-
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-
     print "starting "+APPID +" v. "+VERSION
-
     ind = buyBTSindicator()
-
     ind.main()
 
