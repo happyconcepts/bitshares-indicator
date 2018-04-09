@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# bitshares-indicator
-# copyright 2018 ben bird
+# bitshares-indicator copyright 2018 ben bird
 # https://github.com/happyconcepts/bitshares-indicator
+# mit license ~ open source software 
+
 
 VERSION = '0.51'
 
@@ -40,9 +41,13 @@ class buyBTSindicator(object):
 
 	self.interval = 5  
 
+	self.interval_last = 5
+
         self.symbol = 'BTS'
 
 	self.base = 'USD'
+
+	self.base_last = 'USD'
 
 	self.menu = Gtk.Menu()
 
@@ -72,13 +77,13 @@ class buyBTSindicator(object):
 
         item_about.show()
 
-        self.menu.append(item_about)
+        self.menu.append(item_about)	
 
 	item_settings = Gtk.MenuItem()
 
-        item_settings.set_label("Settings...")
+        item_settings.set_label("Settings")
 
-	item_settings.connect("activate", self.set_list)
+	item_settings.connect("activate", self.handler_settings_callback)
 
         item_settings.show()
 
@@ -98,13 +103,12 @@ class buyBTSindicator(object):
 
         self.ind.set_menu(self.menu)
 
+    def handler_settings_callback (self, source):
 
-    def set_list (self, source):
-
-	win = ListBoxWindow()
+	win = SettingsWindow()
 
 	win.set_keep_above(True)
-
+	# dont quit app indicator when window closed
 	win.connect("destroy", self.handler_menu_reload)
 
 	win.show_all()
@@ -118,11 +122,14 @@ class buyBTSindicator(object):
 
     def handler_menu_reload(self, evt):
 
-        self.price_update()
+	if (ind.base_last != ind.base) or (ind.interval_last != ind.interval):
 
-    def about(source, evt):
+            self.price_update()
 
-        dialog = Gtk.AboutDialog()
+
+    def about(self, source):
+
+	dialog = Gtk.AboutDialog()
 
 	dialog.set_border_width(10)
 
@@ -134,7 +141,7 @@ class buyBTSindicator(object):
 
         dialog.set_wrap_license(True)
 
-	dialog.set_copyright('Copyright 2018 Ben Bird.')
+	dialog.set_copyright('Copyright 2018 Ben Bird')
 
 	dialog.set_comments('The ~only~ Desktop App indicator you will need to track the price of Bitshares (BTS)\n\n'+'Donations appreciated!\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
 	dialog.set_website('http://www.buybts.com')  
@@ -187,7 +194,7 @@ class buyBTSindicator(object):
 
         except Exception as e:
 
-            self.ind.set_label("price update failed!","")
+            self.ind.set_label("price update failed","")
 
 	    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bt_s.png")
 
@@ -312,45 +319,25 @@ class coinmktcap:
 	return  u'\u20AC'+str(self.last)
 
 
-class ListBoxWindow(Gtk.Window):
+class SettingsWindow(Gtk.Window):
 
     def __init__(self):
 
         Gtk.Window.__init__(self, title="Settings")
 
-	self.set_default_size(300, 140)
+        self.set_border_width(15)
 
-        self.set_position(Gtk.WindowPosition.CENTER)
+	self.set_default_size(300, 160)
 
-	self.set_border_width(10)
+	self.set_position(Gtk.WindowPosition.CENTER)
 
-        box_outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        box_outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=15)
 
         self.add(box_outer)
 
-        listbox = Gtk.ListBox()
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
 
-        listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-
-        box_outer.pack_start(listbox, True, True, 0)
-        
-	row = Gtk.ListBoxRow()
-
-        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
-
-        row.add(hbox)
-
-        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=50)
-
-        hbox.pack_start(vbox, True, True, 0)
-
-        label1 = Gtk.Label("Automatic Updates", xalign=0)
-
-        #label2 = Gtk.Label("PRICE SETTINGS", xalign=0)
-
-        vbox.pack_start(label1, True, True, 0)
-
-        #vbox.pack_start(label2, True, True, 0)
+        label1 = Gtk.Label("Price Updates", xalign=0)
 
         switch = Gtk.Switch()
 
@@ -358,19 +345,12 @@ class ListBoxWindow(Gtk.Window):
 
 	switch.set_active(True)
 
+	hbox.pack_start(label1, True, True, 0)
         hbox.pack_start(switch, False, True, 0)
 
-        listbox.add(row)
-
-
-	row = Gtk.ListBoxRow()
-        
-	hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
-
-        row.add(hbox)
-
-	vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=50)
-        hbox.pack_start(vbox, True, True, 0)
+	box_outer.pack_start(hbox, True, True, 0)
+ 
+	hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
 
 	label = Gtk.Label("Base currency:", xalign=0)
 
@@ -382,8 +362,7 @@ class ListBoxWindow(Gtk.Window):
 
 	button1.connect("clicked", self.change_base, "USD")
 
-	vbox.pack_start(label, True, True, 0)
-	#hbox.pack_start(label, False, False, 0)
+	hbox.pack_start(label, True, True, 0)
 
 	hbox.pack_start(button1, False, False, 0)
 
@@ -398,17 +377,11 @@ class ListBoxWindow(Gtk.Window):
         button2.connect("clicked", self.change_base, "EUR")
 
 	hbox.pack_start(button2, False, False, 0)
+	box_outer.pack_start(hbox, True, True, 0)
 
-	listbox.add(row)
+	hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
 
-
-        row = Gtk.ListBoxRow()
-
-        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
-
-        row.add(hbox)
-
-        label3 = Gtk.Label("Update interval, minutes", xalign=0)
+        label3 = Gtk.Label("Update interval (minutes)", xalign=0)
 
         combo = Gtk.ComboBoxText()
 
@@ -464,19 +437,14 @@ class ListBoxWindow(Gtk.Window):
 
         hbox.pack_start(combo, False, True, 0)
 
-        listbox.add(row)
+	box_outer.pack_start(hbox, True, True, 0)
 
-
-        listbox_2 = Gtk.ListBox()
-	# list something here
-        #listbox_2.connect('row-activated', lambda widget, row: print (row.data))
-    
-        box_outer.pack_start(listbox_2, True, True, 0)
-        listbox_2.show_all()
 
     def change_base(self, button, name):
 
 	if button.get_active():
+
+	    ind.base_last = ind.base
 
 	    ind.base = name
 
@@ -494,6 +462,8 @@ class ListBoxWindow(Gtk.Window):
 
 	        GLib.source_remove(ind.testid)
 
+		ind.interval_last = int(ind.interval)
+
 		ind.interval = int(self.interval_new)
 
 		ind.testid = GLib.timeout_add_seconds(60 * ind.interval, ind.price_update)
@@ -501,7 +471,8 @@ class ListBoxWindow(Gtk.Window):
 	    except Exception as e:
 
 		print ("could not change update interval")
-  
+
+
 if __name__ == "__main__":
 
     signal.signal(signal.SIGINT, signal.SIG_DFL)
