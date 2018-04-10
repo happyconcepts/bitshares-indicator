@@ -121,9 +121,14 @@ class buyBTSindicator(object):
 	print APPID +" has quit."
 
     def handler_menu_reload(self, evt):
-
+	#print "-----------------"	
+	#print "ind.base: " +ind.base
+	#print "ind.base_last: " +ind.base_last
+	#print "ind.interval: " +str(ind.interval)
+	#print "ind.interval_last: " +str(ind.interval_last)
 	if (ind.base_last != ind.base) or (ind.interval_last != ind.interval):
 
+	    ind.base_last = ind.base #
             self.price_update()
 
 
@@ -325,7 +330,9 @@ class coinmktcap:
 
 	return  u'\u20AC'+str(self.last)
 
-
+# changes selected base upon click...
+# better to wait until window closed so multiple clicks dont trigger api calls.
+# or assess chng @ "base is set with" call 
 class SettingsWindow(Gtk.Window):
 
     def __init__(self):
