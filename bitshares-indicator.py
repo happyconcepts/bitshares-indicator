@@ -196,7 +196,7 @@ class buyBTSindicator(object):
 
             self.ind.set_label("price update failed","")
 
-	    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bt_s.png")
+	    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bell_on.png")
 
 	    print timestamp + " prices not updated (check connection)"
 
@@ -241,9 +241,13 @@ class gate:
 
             if chg[:1] != '-':
 
-                chg = "+"+ chg
+                chg = " +"+ chg +"% "
+	
+	    else:
 
-	    return 'Last: $'+str(self.last) + " " +chg +"% (24h)"
+		chg = " ("+chg+")"
+
+	    return '$'+str(self.last) + " " +chg
 
     def price(self):
 
@@ -310,9 +314,12 @@ class coinmktcap:
 
 	    if self.chg[:1] != '-':
 
-                self.chg = "+"+ self.chg
+                self.chg = " +"+ self.chg +"% "
+	    else:
 
-	    return 'Last: '+ u'\u20AC' + str(self.last) + " "+ self.chg +"% (24h)"
+		self.chg = " ("+self.chg+"%) "
+
+	    return u'\u20AC' + str(self.last) + " "+ self.chg
 
     def price(self):
 
