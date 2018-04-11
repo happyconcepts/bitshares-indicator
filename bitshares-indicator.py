@@ -121,11 +121,12 @@ class buyBTSindicator(object):
 	print APPID +" has quit."
 
     def handler_menu_reload(self, evt):
-	#print "-----------------"	
-	#print "ind.base: " +ind.base
-	#print "ind.base_last: " +ind.base_last
-	#print "ind.interval: " +str(ind.interval)
-	#print "ind.interval_last: " +str(ind.interval_last)
+	print "-----------------"	
+	print evt	
+	print "ind.base: " +ind.base
+	print "ind.base_last: " +ind.base_last
+	print "ind.interval: " +str(ind.interval)
+	print "ind.interval_last: " +str(ind.interval_last)
 	if (ind.base_last != ind.base) or (ind.interval_last != ind.interval):
 
 	    ind.base_last = ind.base #
@@ -179,6 +180,9 @@ class buyBTSindicator(object):
 
 		    print timestamp + " BTS price: "+ self.c.price()
 
+		    print "symbol: " +self.symbol
+		    print "base: " +self.base
+
                 else :
 
 		    self.g = gate(self.symbol, self.base)
@@ -188,6 +192,9 @@ class buyBTSindicator(object):
 		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
 
 		    print timestamp + " BTS price: "+ self.g.price()
+
+		    print "symbol: " +self.symbol
+		    print "base: " +self.base
 		    
 	    else:
 
@@ -225,11 +232,13 @@ class gate:
     
 	self.pair = coin +"_"+ base
 
-        self.pair.lower()
+        self.pair = self.pair.lower()
 
     def run(self):
 
         url = 'http://data.gate.io/api2/1/ticker/'+self.pair
+
+	print "gate sub " +self.pair
 
         response = requests.get(url)
 
