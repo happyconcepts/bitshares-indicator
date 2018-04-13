@@ -1,10 +1,10 @@
 #!/usr/bin/env python
+
 # -*- coding: utf-8 -*-
 
 # bitshares-indicator copyright 2018 ben bird
 # https://github.com/happyconcepts/bitshares-indicator
 # mit license ~ open source software 
-
 
 VERSION = '0.55'
 
@@ -108,7 +108,7 @@ class buyBTSindicator(object):
 	win = SettingsWindow()
 
 	win.set_keep_above(True)
-	# dont quit app indicator when window closed
+	
 	win.connect("destroy", self.handler_menu_reload)
 
 	win.show_all()
@@ -120,15 +120,23 @@ class buyBTSindicator(object):
 
 	print APPID +" has quit."
 
-    def handler_menu_reload(self, evt):
-	print "-----------------"	
-	print evt	
-	print "ind.base: " +ind.base
-	print "ind.base_last: " +ind.base_last
-	print "ind.interval: " +str(ind.interval)
-	print "ind.interval_last: " +str(ind.interval_last)
-	if (ind.base_last != ind.base) or (ind.interval_last != ind.interval):
+    def dump(self, obj):
+        for attr in dir(obj):
+            if hasattr( obj, attr ):
+        	print( "obj.%s = %s" % (attr, getattr(obj, attr)))
 
+
+
+    def handler_menu_reload(self, source):
+	#print "-----------------"	
+	#print evt	
+	#print "ind.base: " +ind.base
+	#print "ind.base_last: " +ind.base_last
+	#print "ind.interval: " +str(ind.interval)
+	#print "ind.interval_last: " +str(ind.interval_last)
+	#print self.dump(source)
+
+	if (ind.base_last != ind.base) or (ind.interval_last != ind.interval):
 	    ind.base_last = ind.base #
             self.price_update()
 
@@ -180,8 +188,6 @@ class buyBTSindicator(object):
 
 		    print timestamp + " BTS price: "+ self.c.price()
 
-		    print "symbol: " +self.symbol
-		    print "base: " +self.base
 
                 else :
 
@@ -193,9 +199,10 @@ class buyBTSindicator(object):
 
 		    print timestamp + " BTS price: "+ self.g.price()
 
-		    print "symbol: " +self.symbol
-		    print "base: " +self.base
-		    
+		   
+		#print "symbol: " +self.symbol
+		#print "base: " +self.base
+
 	    else:
 
 		self.ind.set_label("Now in test mode.","")
@@ -238,7 +245,7 @@ class gate:
 
         url = 'http://data.gate.io/api2/1/ticker/'+self.pair
 
-	print "gate sub " +self.pair
+	#print "gate sub " +self.pair
 
         response = requests.get(url)
 
@@ -246,7 +253,7 @@ class gate:
 
         if not json['result']:
 
-            return "Gate says: " + json['message']
+            return "Gate says: "+ json['message']
 
         else:
 	    chg = str(round(json['percentChange'],1))
@@ -339,7 +346,7 @@ class coinmktcap:
 
 	return  u'\u20AC'+str(self.last)
 
-# changes selected base upon click...
+# change selected base on click...
 # better to wait until window closed so multiple clicks dont trigger api calls.
 # or assess chng @ "base is set with" call 
 class SettingsWindow(Gtk.Window):
