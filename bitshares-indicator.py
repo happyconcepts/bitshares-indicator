@@ -15,6 +15,7 @@ import requests
 import gi
 import signal
 
+
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GLib
 
@@ -25,6 +26,10 @@ gi.require_version('AppIndicator3', '0.1')
 from gi.repository import AppIndicator3 as AppIndicator
 
 from datetime import datetime
+
+test = False
+if test == True:	    
+    import testing
 
 class buyBTSindicator(object):
 
@@ -37,7 +42,11 @@ class buyBTSindicator(object):
 
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
-	self.test = False
+	#self.test = True
+	
+	
+
+	self.price_active = True
 
 	self.interval = 5  
 
@@ -120,21 +129,25 @@ class buyBTSindicator(object):
 
 	print APPID +" has quit."
 
-    def dump(self, obj):
-        for attr in dir(obj):
-            if hasattr( obj, attr ):
-        	print( "obj.%s = %s" % (attr, getattr(obj, attr)))
+
 
 
 
     def handler_menu_reload(self, source):
-	#print "-----------------"	
-	#print evt	
-	#print "ind.base: " +ind.base
-	#print "ind.base_last: " +ind.base_last
-	#print "ind.interval: " +str(ind.interval)
-	#print "ind.interval_last: " +str(ind.interval_last)
-	#print self.dump(source)
+	
+	if (test == True):
+
+	    print "------test mode ------"	
+
+	    print "ind.base: " +ind.base
+
+	    print "ind.base_last: " +ind.base_last
+
+	    print "ind.interval: " +str(ind.interval)
+
+	    print "ind.interval_last: " +str(ind.interval_last)
+	    print "-----------------"
+	    #print testing.dump(source)
 
 	if (ind.base_last != ind.base) or (ind.interval_last != ind.interval):
 	    ind.base_last = ind.base #
@@ -174,7 +187,7 @@ class buyBTSindicator(object):
 
 	try:
 
-	    if not self.test:
+	    if self.price_active == True:
 
 		self.b = binance(self.symbol)
 		
@@ -199,17 +212,18 @@ class buyBTSindicator(object):
 
 		    print timestamp + " BTS price: "+ self.g.price()
 
-		   
-		#print "symbol: " +self.symbol
-		#print "base: " +self.base
+		if (test == True): 
+  
+		    print "symbol/base: " +self.symbol +"/"+self.base
 
 	    else:
 
-		self.ind.set_label("Now in test mode.","")
+		#self.ind.set_label("Now in test mode.","")
+		self.ind.set_label("Pricing is not active.","")
 
-		print timestamp + " prices not updated (test mode)"
-
-		print "update interval is " + str(self.interval) + " min"
+		print timestamp + " prices not updated (not active)"
+		if (test == True):
+		    print "update interval is " + str(self.interval) + " min"
 
         except Exception as e:
 
@@ -346,9 +360,7 @@ class coinmktcap:
 
 	return  u'\u20AC'+str(self.last)
 
-# change selected base on click...
-# better to wait until window closed so multiple clicks dont trigger api calls.
-# or assess chng @ "base is set with" call 
+
 class SettingsWindow(Gtk.Window):
 
     def __init__(self):
@@ -417,7 +429,7 @@ class SettingsWindow(Gtk.Window):
 
         combo = Gtk.ComboBoxText()
 
-	combo.connect("changed", self.change_interval)
+	combo.connect("changed", self.change_interval) ##
 
         combo.insert(0, "1", "1")
 
