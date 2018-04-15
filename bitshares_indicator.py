@@ -6,7 +6,7 @@
 # https://github.com/happyconcepts/bitshares-indicator
 # mit license ~ open source software 
 
-VERSION = '0.55'
+VERSION = '0.6'
 
 APPID 	= 'bitshares-indicator'
 
@@ -14,6 +14,11 @@ import os
 import requests 
 import gi
 import signal
+
+def add (x,y):
+    """Add function"""
+    return x + y
+
 
 
 gi.require_version('Gtk', '3.0')
@@ -65,6 +70,8 @@ class buyBTSindicator(object):
         self.price_update()
 
         self.testid = GLib.timeout_add_seconds(60 * self.interval, self.price_update)
+
+
 
     def build_menu(self):
 
