@@ -265,7 +265,7 @@ class gate:
             return "Gate says: "+ json['message']
 
         else:
-	    chg = str(round(json['percentChange'],1))
+	    chg = json['percentChange']
 
 	    self.last = round(json['last'],4)
 
@@ -275,7 +275,7 @@ class gate:
 	
 	    else:
 
-		chg = " ("+chg+")"
+		chg = " ("+chg+"%) "
 
 	    return '$'+str(self.last) + " " +chg
 
