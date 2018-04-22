@@ -1,18 +1,29 @@
-# Testing module for bitshares-indicator
-# test_gate.py
-# bitshares-indicator copyright 2018 ben bird
+# Unit tests for bitshares-indicator
 # https://github.com/happyconcepts/bitshares-indicator
-# mit license ~ open source software 
+# bitshares-indicator copyright 2018 ben bird
 
-# python -m unittest test_gate.py
-# import unittest module 9in std 
+# python -m unittest test_gate
+
 import unittest
-import bitshares-indicator
+import bitshares_indicator
 
-class TestCalc(unittest.TestCase):
+class TestBitSharesIndicator(unittest.TestCase):
 
-    def testGate(self):
-	result = bitshares-indicator.add(10,5)
+    def test_Add(self):
+	result = bitshares_indicator.add(10,5)
 	self.assertEqual(result, 15)
 
+    def test_Gate(self):
+	g = bitshares_indicator.gate()
+	result = g.run()
+	self.assertTrue(result)
+
+#    def test_obj(self):
+#	result = bitshares_indicator.buyBTSindicator.add(10,5)
+#	self.assertEqual(result, 15)
+
+
+
+if __name__ == '__main__':
+    unittest.main()
 

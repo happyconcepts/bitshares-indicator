@@ -1,24 +1,17 @@
 #!/usr/bin/env python
-
 # -*- coding: utf-8 -*-
 
 # bitshares-indicator copyright 2018 ben bird
 # https://github.com/happyconcepts/bitshares-indicator
-# mit license ~ open source software 
+# mit license
 
 VERSION = '0.6'
-
 APPID 	= 'bitshares-indicator'
 
 import os
 import requests 
 import gi
 import signal
-
-def add (x,y):
-    """Add function"""
-    return x + y
-
 
 
 gi.require_version('Gtk', '3.0')
@@ -33,8 +26,11 @@ from gi.repository import AppIndicator3 as AppIndicator
 from datetime import datetime
 
 test = False
-if test == True:	    
-    import testing
+
+if test == True:
+	    
+    #import testing
+    pass
 
 class buyBTSindicator(object):
 
@@ -46,10 +42,6 @@ class buyBTSindicator(object):
         )
 
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
-
-	#self.test = True
-	
-	
 
 	self.price_active = True
 
@@ -138,13 +130,9 @@ class buyBTSindicator(object):
 
 
 
-
-
     def handler_menu_reload(self, source):
 	
-	if (test == True):
-
-	    print "------test mode ------"	
+	if (test == True):	
 
 	    print "ind.base: " +ind.base
 
@@ -153,7 +141,7 @@ class buyBTSindicator(object):
 	    print "ind.interval: " +str(ind.interval)
 
 	    print "ind.interval_last: " +str(ind.interval_last)
-	    print "-----------------"
+
 	    #print testing.dump(source)
 
 	if (ind.base_last != ind.base) or (ind.interval_last != ind.interval):
@@ -426,13 +414,15 @@ class SettingsWindow(Gtk.Window):
 
         button2.connect("clicked", self.change_base, "EUR")
 
+	# An integer which is the model index of the currently active item, or -1 if there's no active item.
+
 	hbox.pack_start(button2, False, False, 0)
 
 	box_outer.pack_start(hbox, True, True, 0)
 
 	hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
 
-        label3 = Gtk.Label("Update interval (minutes)", xalign=0)
+        label3 = Gtk.Label("Update interval, minutes", xalign=0)
 
         combo = Gtk.ComboBoxText()
 
@@ -522,6 +512,11 @@ class SettingsWindow(Gtk.Window):
 	    except Exception as e:
 
 		print ("could not change update interval")
+
+
+def add (x,y):
+    """Add function"""
+    return x + y
 
 
 if __name__ == "__main__":
