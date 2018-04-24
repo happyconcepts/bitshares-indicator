@@ -222,7 +222,7 @@ class buyBTSindicator(object):
 
         except Exception as e:
 
-            self.ind.set_label("price update failed","")
+            self.ind.set_label("bitshares-indicator","")
 
 	    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bell_on.png")
 
