@@ -117,7 +117,7 @@ class buyBTSindicator(object):
 
 	win.set_keep_above(True)
 	
-	win.connect("destroy", self.handler_menu_reload)
+	win.connect("destroy", self.handler_settings)
 
 	win.show_all()
 
@@ -131,6 +131,25 @@ class buyBTSindicator(object):
 
 
     def handler_menu_reload(self, source):
+	
+	if (test == True):	
+
+	    print "ind.base: " +ind.base
+
+	    print "ind.base_last: " +ind.base_last
+
+	    print "ind.interval: " +str(ind.interval)
+
+	    print "ind.interval_last: " +str(ind.interval_last)
+
+	    #print testing.dump(source)
+
+	#if (ind.base_last != ind.base) or (ind.interval_last != ind.interval):
+	    ind.base_last = ind.base #
+            self.price_update()
+
+
+    def handler_settings(self, source):
 	
 	if (test == True):	
 
@@ -228,7 +247,9 @@ class buyBTSindicator(object):
 
 	    print timestamp + " prices not updated (check connection)"
 
-	    print(str(e))
+	    if test == True:
+
+		print(str(e))
 
         return True
 
