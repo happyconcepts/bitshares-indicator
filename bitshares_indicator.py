@@ -131,18 +131,6 @@ class buyBTSindicator(object):
 
 
     def handler_menu_reload(self, source):
-	
-	if (test == True):	
-
-	    print "ind.base: " +ind.base
-
-	    print "ind.base_last: " +ind.base_last
-
-	    print "ind.interval: " +str(ind.interval)
-
-	    print "ind.interval_last: " +str(ind.interval_last)
-
-	    #print testing.dump(source)
 
 	#if (ind.base_last != ind.base) or (ind.interval_last != ind.interval):
 	    ind.base_last = ind.base #
