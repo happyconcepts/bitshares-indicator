@@ -5,7 +5,7 @@
 # https://github.com/happyconcepts/bitshares-indicator
 # mit license
 
-VERSION = '0.62'
+VERSION = '0.63'
 APPID 	= 'bitshares-indicator'
 
 import os
@@ -112,7 +112,7 @@ class buyBTSindicator(object):
         dialog.set_license('MIT License\n\n' + ' A copy of the license is available at https://github.com/happyconcepts/bitshares-indicator/blob/master/LICENSE' )
         dialog.set_wrap_license(True)
 	dialog.set_copyright('Copyright 2018 Ben Bird')
-	dialog.set_comments('Track Bitshares prices on your Linux desktop\n\n'+'Donations appreciated!\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
+	dialog.set_comments('Track Bitshares prices on Linux! (Unity desktop)\n\n'+'Your donations help:\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
 	dialog.set_website('http://www.buybts.com')  
 	pixbuf = Pixbuf.new_from_file_at_size("icons/bitshares.png", 45, 45)
 	dialog.set_logo(pixbuf)
@@ -158,7 +158,7 @@ class buyBTSindicator(object):
 	    print timestamp + " prices not updated (check connection)"
 
 	    if test == True:
-		print(str(e))
+	        print(str(e))
 
         return True
 
@@ -183,15 +183,16 @@ class gate:
             return "Gate says: "+ json['message']
         else:
 	    chg = json['percentChange']
-	    self.last = round(json['last'],4)
+	    self.last = json['last']
+	    #self.last = round(json['last'],4)
             if chg[:1] != '-':
                 chg = " +"+ chg +"% "
 	    else:
 		chg = " ("+chg+"%) "
-	    return '$'+str(self.last) + " " +chg
+	    return '$'+self.last + " " +chg
 
     def price(self):
-	return "$" +str(self.last)
+	return "$" +self.last
 	
 class binance:
     def __init__(self, coin='BTS', base='BTC'):
