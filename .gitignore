@@ -1,3 +1,4 @@
 build/*
-bitshares-indicator/*.pyc
+bitshares-indicator/
+*.pyc
 
