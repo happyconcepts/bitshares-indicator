@@ -5,7 +5,7 @@
 # https://github.com/happyconcepts/bitshares-indicator
 # mit license
 
-VERSION = '0.63'
+VERSION = '0.64'
 APPID 	= 'bitshares-indicator'
 
 import os
