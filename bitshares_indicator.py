@@ -184,11 +184,17 @@ class gate:
         else:
 	    chg = json['percentChange']
 	    self.last = json['last']
-	    #self.last = round(json['last'],4)
+
+	    if type(self.last) is not unicode: # its a number
+		print type(self.last)		
+		self.last = round(json['last'],4)
+		self.last = str(self.last)
+
             if chg[:1] != '-':
                 chg = " +"+ chg +"% "
 	    else:
 		chg = " ("+chg+"%) "
+
 	    return '$'+self.last + " " +chg
 
     def price(self):
@@ -267,6 +273,7 @@ class SettingsWindow(Gtk.Window):
         
 	if ind.base == 'USD':
 	    button1.set_active(True)
+
 	button1.connect("clicked", self.change_base, "USD")
 	hbox.pack_start(label, True, True, 0)
 	hbox.pack_start(button1, False, False, 0)
@@ -276,6 +283,7 @@ class SettingsWindow(Gtk.Window):
         
 	if ind.base == 'EUR':
 	    button2.set_active(True)
+
         button2.connect("clicked", self.change_base, "EUR")
 
 	# An integer which is the model index of the currently active item, or -1 if there's no active item.
