@@ -5,7 +5,7 @@
 # https://github.com/happyconcepts/bitshares-indicator
 # mit license
 
-VERSION = '0.64'
+VERSION = '0.64b'
 APPID 	= 'bitshares-indicator'
 
 import os
@@ -165,7 +165,6 @@ class buyBTSindicator(object):
     def main(self):
         Gtk.main()
 
-
 class gate:
     def __init__(self, coin='bts', base='usdt'):
 	if base == 'USD':
@@ -185,15 +184,15 @@ class gate:
 	    chg = json['percentChange']
 	    self.last = json['last']
 
-	    if type(self.last) is not unicode: # its a number
-		print type(self.last)		
-		self.last = round(json['last'],4)
-		self.last = str(self.last)
-
             if chg[:1] != '-':
                 chg = " +"+ chg +"% "
 	    else:
 		chg = " ("+chg+"%) "
+
+	    if type(self.last) is not unicode: # its a number
+		#print type(self.last)		
+		self.last = round(json['last'],4)
+		self.last = str(self.last)
 
 	    return '$'+self.last + " " +chg
 
@@ -286,7 +285,7 @@ class SettingsWindow(Gtk.Window):
 
         button2.connect("clicked", self.change_base, "EUR")
 
-	# An integer which is the model index of the currently active item, or -1 if there's no active item.
+	# integer rturned is the model index of the currently active item, or -1 if no active item.
 	hbox.pack_start(button2, False, False, 0)
 	box_outer.pack_start(hbox, True, True, 0)
 
