@@ -18,10 +18,10 @@ class TestBitSharesIndicator(unittest.TestCase):
 	result = bitshares_indicator.add(10,5)
 	self.assertEqual(result, 15)
 
-    #def test_Gate(self):
-#	g = bitshares_indicator.gate()
-#	result = g.run()
-#	self.assertTrue(result)
+    def test_Gate(self):
+	g = bitshares_indicator.gate()
+	result = g.run()
+	self.assertTrue(result)
 	#self.assertEqual(result, "No JSON object could be decoded")
 
     def test_Binance(self):
