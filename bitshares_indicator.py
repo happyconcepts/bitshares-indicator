@@ -184,6 +184,11 @@ class gate:
 	    chg = json['percentChange']
 	    self.last = json['last']
 
+	    # expression1 if condition else expression2
+	    if type(chg) is not unicode: # its a number
+		#print type(chg)		
+		chg = str(json['percentChange'])
+
             if chg[:1] != '-':
                 chg = " +"+ chg +"% "
 	    else:
