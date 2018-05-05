@@ -21,15 +21,25 @@ from gi.repository.GdkPixbuf import Pixbuf
 gi.require_version('AppIndicator3', '0.1')
 from gi.repository import AppIndicator3 as AppIndicator
 
+PROJECTDIR = os.path.dirname(os.path.realpath(__file__))
+
+dir = os.path.expanduser("~") +"/.bitshares-indicator"
+if not os.path.exists(dir):
+    os.makedirs(dir)
+filename = os.path.join(dir, 'prefs.json')
+
+f = open(filename, 'w')
+f.write('{"version":"0.1test","base":"eur","interval":"5","modified":"1525555702"}\n')
+f.close()
+
 test = False
 if test == True:    
-    pass
+    print dir
 
 class buyBTSindicator(object):
     def __init__(self):
 	self.ind = AppIndicator.Indicator.new(APPID,
-	os.path.dirname(os.path.realpath(__file__)) +
-	"/icons/bts.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
+	PROJECTDIR + "/icons/bts.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
         )
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
