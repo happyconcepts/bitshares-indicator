@@ -28,13 +28,12 @@ if not os.path.exists(dir):
     os.makedirs(dir)
 filename = os.path.join(dir, 'prefs.json')
 
-f = open(filename, 'w')
-f.write('{"version":"0.1test","base":"eur","interval":"5","modified":"1525555702"}\n')
-f.close()
-
-test = False
-if test == True:    
-    print dir
+test = True
+if test == True:  
+    print "test mode"  
+    print "prefs: " +dir
+    with open(filename, 'w') as f:
+        f.write('{"version":"0.1test","base":"eur","interval":"5","modified":"1525555702"}\n')
 
 class buyBTSindicator(object):
     def __init__(self):
