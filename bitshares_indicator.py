@@ -48,23 +48,23 @@ class buyBTSindicator(object):
 
     def build_menu(self):
 
-        item_refresh = Gtk.MenuItem()
-        item_refresh.set_label("Update Prices")
-        item_refresh.connect("activate", self.handler_menu_reload)
-        item_refresh.show()
-        self.menu.append(item_refresh)
-
 	item_about = Gtk.MenuItem()
-        item_about.set_label("About")
+        item_about.set_label("About...")
         item_about.connect("activate", self.about)
         item_about.show()
         self.menu.append(item_about)	
 
 	item_settings = Gtk.MenuItem()
-        item_settings.set_label("Settings")
+        item_settings.set_label("Settings...")
 	item_settings.connect("activate", self.handler_settings_callback)
         item_settings.show()
         self.menu.append(item_settings)
+
+        item_refresh = Gtk.MenuItem()
+        item_refresh.set_label("Update Prices")
+        item_refresh.connect("activate", self.handler_menu_reload)
+        item_refresh.show()
+        self.menu.append(item_refresh)
 
 	item = Gtk.MenuItem()
         item.set_label("Exit")
