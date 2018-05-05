@@ -143,7 +143,6 @@ class buyBTSindicator(object):
 		    print "symbol/base: " +self.symbol +"/"+self.base
 
 	    else:
-		#self.ind.set_label("Now in test mode.","")
 		self.ind.set_label("Pricing is not active.","")
 
 		print timestamp + " prices not updated (not active)"
