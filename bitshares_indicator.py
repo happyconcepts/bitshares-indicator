@@ -32,8 +32,14 @@ test = True
 if test == True:  
     print "test mode"  
     print "prefs: " +dir
-    with open(filename, 'w') as f:
-        f.write('{"version":"0.1test","base":"eur","interval":"5","modified":"1525555702"}\n')
+    try:
+        with open(filename, 'r') as f:
+            pass
+	    #f.write('{"version":"0.1test","base":"eur","interval":"5","modified":"1525555702"}\n')
+    except IOError as e:
+        print "Unable to access preferences file. Does it exist and do we have write permission?" 
+	#Does not exist OR no read permissions
+
 
 class buyBTSindicator(object):
     def __init__(self):
