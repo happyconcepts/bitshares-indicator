@@ -13,6 +13,7 @@ import requests
 import gi
 import signal
 from datetime import datetime
+import json
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GLib
@@ -28,18 +29,9 @@ if not os.path.exists(dir):
     os.makedirs(dir)
 filename = os.path.join(dir, 'prefs.json')
 
-test = True
+test = False
 if test == True:  
     print "test mode"  
-    print "prefs: " +dir
-    try:
-        with open(filename, 'r') as f:
-            pass
-	    #f.write('{"version":"0.1test","base":"eur","interval":"5","modified":"1525555702"}\n')
-    except IOError as e:
-        print "Unable to access preferences file. Does it exist and do we have write permission?" 
-	#Does not exist OR no read permissions
-
 
 class buyBTSindicator(object):
     def __init__(self):
@@ -208,7 +200,7 @@ class gate:
 	    else:
 		chg = " ("+chg+"%) "
 
-	    if type(self.last) is not unicode: # its a number
+	    if type(self.last) is not unicode:
 		#print type(self.last)		
 		self.last = round(json['last'],4)
 		self.last = str(self.last)
@@ -368,9 +360,25 @@ def add (x,y):
     """Add function"""
     return x + y
 
+print "starting "+APPID +" v. "+VERSION
+
+print "prefs: " +dir +"/"
+try:
+    with open(filename, 'r') as f:
+        pass
+	# read the prefs.
+	#prefs = f.read()
+	#f.write('{"version":"0.1test","base":"eur","interval":"5","modified":"1525555702"}\n')
+except IOError as e:
+    #Does not exist OR no read permissions...
+    print "Unable to access prefs.json"
+    print e 
+    
+
+
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-    print "starting "+APPID +" v. "+VERSION
+    
     ind = buyBTSindicator()
     ind.main()
 
