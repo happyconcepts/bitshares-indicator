@@ -5,7 +5,7 @@
 # https://github.com/happyconcepts/bitshares-indicator
 # mit license
 
-VERSION = '0.64b'
+VERSION = '0.65'
 APPID 	= 'bitshares-indicator'
 
 import os
@@ -27,7 +27,7 @@ PROJECTDIR = os.path.dirname(os.path.realpath(__file__))
 dir = os.path.expanduser("~") +"/.bitshares-indicator"
 if not os.path.exists(dir):
     os.makedirs(dir)
-filename = os.path.join(dir, 'prefs.json')
+prefFile = os.path.join(dir, 'prefs.json')
 
 test = False
 if test == True:  
@@ -360,25 +360,31 @@ def add (x,y):
     """Add function"""
     return x + y
 
-print "starting "+APPID +" v. "+VERSION
 
-print "prefs: " +dir +"/"
-try:
-    with open(filename, 'r') as f:
-        pass
-	# read the prefs.
-	#prefs = f.read()
-	#f.write('{"version":"0.1test","base":"eur","interval":"5","modified":"1525555702"}\n')
-except IOError as e:
-    #Does not exist OR no read permissions...
-    print "Unable to access prefs.json"
-    print e 
-    
+
+
+
 
 
 if __name__ == "__main__":
+
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-    
+    print "starting "+APPID +" v. "+VERSION
+    try:
+        with open(prefFile, 'r') as f:
+            pass
+	    print "found saved settings" 
+	    # read the prefs.
+	    #prefs = f.read()
+	    #f.write('{"version":"0.1test","base":"eur","interval":"5","modified":"1525555702"}\n')
+    except IOError as e:
+        #Does not exist OR no read permissions...
+        print "no saved settings found"
+        if test == True:	
+	    print "Unable to access prefs.json"
+	    print "prefs: " +dir +"/"
+	    print e 
+
     ind = buyBTSindicator()
     ind.main()
 

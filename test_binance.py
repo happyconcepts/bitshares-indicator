@@ -2,7 +2,7 @@
 # https://github.com/happyconcepts/bitshares-indicator
 # bitshares-indicator copyright 2018 ben bird
 
-# python -m unittest test_gate
+# python -m unittest test_binance
 
 import unittest
 import bitshares_indicator
@@ -17,11 +17,10 @@ class TestBitSharesIndicator(unittest.TestCase):
 	result = bitshares_indicator.add(10,5)
 	self.assertEqual(result, 15)
 
-    def test_Gate(self):
-	g = bitshares_indicator.gate()
-	result = g.run()
+    def test_Binance(self):
+	b = bitshares_indicator.binance()
+	result = b.run()
 	self.assertTrue(result)
-	#self.assertEqual(result, "No JSON object could be decoded")
 
 if __name__ == '__main__':
     unittest.main()
