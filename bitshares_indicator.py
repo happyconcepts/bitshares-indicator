@@ -40,12 +40,41 @@ class buyBTSindicator(object):
         )
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
+	try:
+	    with open(prefFile, 'r') as f:
+		print "loading saved settings..." 
+		prefs = json.load(f) # read the prefs.
+		#print "version: "+ prefs['version']
+		#print "base: "+ prefs['base']
+		print "update interval is set to: "+ prefs['interval'] +" minutes"
+
+	except IOError as e:
+	    #Does not exist OR no read permissions...
+	    print "no saved settings found"
+	    if test == True:	
+		print "Unable to access prefs.json"
+		print "prefs: " +dir +"/"
+		print e 
+	    print "creating settings file ..."
+	    with open(prefFile, 'w') as uf:
+		uf.write('{"version":"0.1","base":"USD","interval":"5","modified":"1525555702"}\n')
+	    
+
 	self.price_active = True
-	self.interval = 5  
-	self.interval_last = 5
-        self.symbol = 'BTS'
-	self.base = 'USD'
-	self.base_last = 'USD'
+
+	if not prefs['interval']:
+	    self.interval = 5
+	else:
+	    self.interval = int(prefs['interval'])
+
+	if not prefs['base']:
+	    self.base = 'USD'
+	    self.base_last = 'USD'
+	else:
+	    self.base = prefs['base']
+	    self.base_last = prefs['base']
+
+	self.symbol = 'BTS'
 
 	self.menu = Gtk.Menu()
 	self.build_menu()
@@ -107,8 +136,11 @@ class buyBTSindicator(object):
 	    print "ind.interval_last: " +str(ind.interval_last)
 	    #print testing.dump(source)
 
+	# re-update if interval or base is changed.
+	# write prefs if one or both is changed.
 	if (ind.base_last != ind.base) or (ind.interval_last != ind.interval):
 	    ind.base_last = ind.base #
+	    self.save_settings()
             self.price_update()
 
     def about(self, source):
@@ -126,6 +158,13 @@ class buyBTSindicator(object):
 	dialog.run()
         dialog.destroy()
 
+    def save_settings(self):
+	pass
+	with open(prefFile, 'w') as uf:
+		uf.write('{"version":"0.1","base":"' +ind.base +'","interval":"'+str(ind.interval)+'","modified":"'+datetime.now().strftime('%m/%d %H:%M:%S')+'"}\n')
+
+
+	
     def price_update(self):
         timestamp = datetime.now().strftime('%m/%d %H:%M:%S')
 
@@ -138,7 +177,6 @@ class buyBTSindicator(object):
 	     	    self.ind.set_label(self.c.run() + " ~BTC: "+ self.b.run() , "")
 		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
 		    print timestamp + " BTS price: "+ self.c.price()
-
 
                 else :
 		    self.g = gate(self.symbol, self.base)
@@ -361,30 +399,10 @@ def add (x,y):
     return x + y
 
 
-
-
-
-
-
 if __name__ == "__main__":
 
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     print "starting "+APPID +" v. "+VERSION
-    try:
-        with open(prefFile, 'r') as f:
-            pass
-	    print "found saved settings" 
-	    # read the prefs.
-	    #prefs = f.read()
-	    #f.write('{"version":"0.1test","base":"eur","interval":"5","modified":"1525555702"}\n')
-    except IOError as e:
-        #Does not exist OR no read permissions...
-        print "no saved settings found"
-        if test == True:	
-	    print "Unable to access prefs.json"
-	    print "prefs: " +dir +"/"
-	    print e 
-
     ind = buyBTSindicator()
     ind.main()
 
