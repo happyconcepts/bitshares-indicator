@@ -39,7 +39,7 @@ class buyBTSindicator(object):
 	PROJECTDIR + "/icons/bts.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
         )
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
-
+	
 	try:
 	    with open(prefFile, 'r') as f:
 		print "loading saved settings..." 
@@ -57,22 +57,20 @@ class buyBTSindicator(object):
 		print e 
 	    print "creating settings file ..."
 	    with open(prefFile, 'w') as uf:
-		uf.write('{"version":"0.1","base":"USD","interval":"5","modified":"1525555702"}\n')
-	    
+		uf.write('{"version":"0.1","base":"USD","interval":"5","modified":"'+datetime.now().strftime('%m/%d %H:%M:%S')+'"}\n')
+	    with open(prefFile, 'r') as f:
+		prefs = json.load(f) # read the prefs.
 
 	self.price_active = True
 
-	if not prefs['interval']:
-	    self.interval = 5
-	else:
+	if prefs:
 	    self.interval = int(prefs['interval'])
-
-	if not prefs['base']:
-	    self.base = 'USD'
-	    self.base_last = 'USD'
-	else:
 	    self.base = prefs['base']
 	    self.base_last = prefs['base']
+	else:
+	    self.interval = 5
+	    self.base = 'USD'
+	    self.base_last = 'USD'
 
 	self.symbol = 'BTS'
 
