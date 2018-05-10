@@ -1,4 +1,22 @@
 ---------------------------------------------------------------------
+Release 0.7 20180510
+---------------------------------------------------------------------
+Features
+--------
+ - User settings are now saved
+
+ Fixes
+ --------
+ - #9 Type check some json input
+ - #12 Menu UX
+ - Icon tweak
+
+ Future...
+ --------
+ - more bases
+ - more tests
+
+---------------------------------------------------------------------
 Release 0.6 20180424
 ---------------------------------------------------------------------
 Features
@@ -55,7 +73,7 @@ Release 0.3 20180404
 Features
 --------
 - Set base currency: USD, EUR
-- Added Makefile 
+- Added Makefile
 
 Fixes
 --------

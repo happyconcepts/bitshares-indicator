@@ -5,11 +5,11 @@
 # https://github.com/happyconcepts/bitshares-indicator
 # mit license
 
-VERSION = '0.65'
+VERSION = '0.7'
 APPID 	= 'bitshares-indicator'
 
 import os
-import requests 
+import requests
 import gi
 import signal
 from datetime import datetime
@@ -30,8 +30,8 @@ if not os.path.exists(dir):
 prefFile = os.path.join(dir, 'prefs.json')
 
 test = False
-if test == True:  
-    print "test mode"  
+if test == True:
+    print "test mode"
 
 class buyBTSindicator(object):
     def __init__(self):
@@ -39,27 +39,24 @@ class buyBTSindicator(object):
 	PROJECTDIR + "/icons/bts.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
         )
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
-	
+
 	try:
 	    with open(prefFile, 'r') as f:
-		print "loading saved settings..." 
-		prefs = json.load(f) # read the prefs.
-		#print "version: "+ prefs['version']
-		#print "base: "+ prefs['base']
-		print "update interval is set to: "+ prefs['interval'] +" minutes"
+		print "loading saved settings..."
+		prefs = json.load(f)
 
 	except IOError as e:
 	    #Does not exist OR no read permissions...
 	    print "no saved settings found"
-	    if test == True:	
+	    if test == True:
 		print "Unable to access prefs.json"
 		print "prefs: " +dir +"/"
-		print e 
+		print e
 	    print "creating settings file ..."
 	    with open(prefFile, 'w') as uf:
 		uf.write('{"version":"0.1","base":"USD","interval":"5","modified":"'+datetime.now().strftime('%m/%d %H:%M:%S')+'"}\n')
 	    with open(prefFile, 'r') as f:
-		prefs = json.load(f) # read the prefs.
+		prefs = json.load(f) # read prefs.
 
 	self.price_active = True
 
@@ -86,7 +83,7 @@ class buyBTSindicator(object):
         item_about.set_label("About...")
         item_about.connect("activate", self.about)
         item_about.show()
-        self.menu.append(item_about)	
+        self.menu.append(item_about)
 
 	item_settings = Gtk.MenuItem()
         item_settings.set_label("Settings...")
@@ -122,22 +119,19 @@ class buyBTSindicator(object):
 	print APPID +" has quit."
 
     def handler_menu_reload(self, source):
-	#if (ind.base_last != ind.base) or (ind.interval_last != ind.interval):
-	    ind.base_last = ind.base #
+	    ind.base_last = ind.base
             self.price_update()
 
     def handler_settings(self, source):
-	if (test == True):	
+	if (test == True):
 	    print "ind.base: " +ind.base
 	    print "ind.base_last: " +ind.base_last
 	    print "ind.interval: " +str(ind.interval)
 	    print "ind.interval_last: " +str(ind.interval_last)
 	    #print testing.dump(source)
 
-	# re-update if interval or base is changed.
-	# write prefs if one or both is changed.
 	if (ind.base_last != ind.base) or (ind.interval_last != ind.interval):
-	    ind.base_last = ind.base #
+	    ind.base_last = ind.base
 	    self.save_settings()
             self.price_update()
 
@@ -149,27 +143,25 @@ class buyBTSindicator(object):
         dialog.set_license('MIT License\n\n' + ' A copy of the license is available at https://github.com/happyconcepts/bitshares-indicator/blob/master/LICENSE' )
         dialog.set_wrap_license(True)
 	dialog.set_copyright('Copyright 2018 Ben Bird')
-	dialog.set_comments('Track Bitshares prices on Linux! (Unity desktop)\n\n'+'Your donations help:\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
-	dialog.set_website('http://www.buybts.com')  
+	dialog.set_comments('Track Bitshares prices on Linux (Unity desktop)\n\n'+'Your donations help:\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
+	dialog.set_website('http://www.buybts.com')
 	pixbuf = Pixbuf.new_from_file_at_size("icons/bitshares.png", 45, 45)
 	dialog.set_logo(pixbuf)
 	dialog.run()
         dialog.destroy()
 
     def save_settings(self):
-	pass
+
 	with open(prefFile, 'w') as uf:
 		uf.write('{"version":"0.1","base":"' +ind.base +'","interval":"'+str(ind.interval)+'","modified":"'+datetime.now().strftime('%m/%d %H:%M:%S')+'"}\n')
 
-
-	
     def price_update(self):
         timestamp = datetime.now().strftime('%m/%d %H:%M:%S')
 
 	try:
 	    if self.price_active == True:
 		self.b = binance(self.symbol)
-		
+
 		if self.base =='EUR':
 		    self.c = coinmktcap(self.symbol, self.base)
 	     	    self.ind.set_label(self.c.run() + " ~BTC: "+ self.b.run() , "")
@@ -182,7 +174,7 @@ class buyBTSindicator(object):
 		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
 		    print timestamp + " BTS price: "+ self.g.price()
 
-		if (test == True): 
+		if (test == True):
 		    print "symbol/base: " +self.symbol +"/"+self.base
 
 	    else:
@@ -210,13 +202,12 @@ class buyBTSindicator(object):
 class gate:
     def __init__(self, coin='bts', base='usdt'):
 	if base == 'USD':
-	    base = 'USDT'    
+	    base = 'USDT'
 	self.pair = coin +"_"+ base
         self.pair = self.pair.lower()
 
     def run(self):
         url = 'http://data.gate.io/api2/1/ticker/'+self.pair
-	#print "gate sub " +self.pair
         response = requests.get(url)
         json = response.json()
 
@@ -226,9 +217,7 @@ class gate:
 	    chg = json['percentChange']
 	    self.last = json['last']
 
-	    # expression1 if condition else expression2
 	    if type(chg) is not unicode: # its a number
-		#print type(chg)		
 		chg = str(json['percentChange'])
 
             if chg[:1] != '-':
@@ -237,7 +226,7 @@ class gate:
 		chg = " ("+chg+"%) "
 
 	    if type(self.last) is not unicode:
-		#print type(self.last)		
+		#print type(self.last)
 		self.last = round(json['last'],4)
 		self.last = str(self.last)
 
@@ -245,7 +234,7 @@ class gate:
 
     def price(self):
 	return "$" +self.last
-	
+
 class binance:
     def __init__(self, coin='BTS', base='BTC'):
         self.pair = coin+base
@@ -264,8 +253,8 @@ class binance:
 class coinmktcap:
     def __init__(self, coin='bitshares', base='EUR'):
 	if coin == 'BTS':
-	    coin = 'bitshares'  
-     
+	    coin = 'bitshares'
+
 	self.pair = coin +"/?convert="+base
 	self.base = base
 
@@ -316,7 +305,7 @@ class SettingsWindow(Gtk.Window):
 	hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
 	label = Gtk.Label("Base currency:", xalign=0)
         button1 = Gtk.RadioButton.new_with_label_from_widget(None, "$ USD")
-        
+
 	if ind.base == 'USD':
 	    button1.set_active(True)
 
@@ -326,7 +315,7 @@ class SettingsWindow(Gtk.Window):
 
 	button2 = Gtk.RadioButton.new_from_widget(button1)
         button2.set_label(u'\u20AC' +" Euro")
-        
+
 	if ind.base == 'EUR':
 	    button2.set_active(True)
 
@@ -403,4 +392,3 @@ if __name__ == "__main__":
     print "starting "+APPID +" v. "+VERSION
     ind = buyBTSindicator()
     ind.main()
-
