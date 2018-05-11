@@ -1,5 +1,5 @@
 run:
-	python bitshares-indicator.py
+	python bitshares_indicator.py
 
 install:
 	sudo apt-get install python-requests
