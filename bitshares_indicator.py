@@ -220,6 +220,9 @@ class gate:
 	    if type(chg) is not unicode: # its a number
 		chg = str(json['percentChange'])
 
+	    # kludge fix #15 truncate str at 6 char.
+	    chg = (chg[:5]) if len(chg) > 5 else chg
+
             if chg[:1] != '-':
                 chg = " +"+ chg +"% "
 	    else:
