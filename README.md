@@ -1,15 +1,14 @@
 # bitshares-indicator
-This unofficial Application Indicator for Unity desktop tracks prices of Bitshares cryptotokens.
-
+bitshares-indicator by @happyconcepts will monitor the price of Bitshares on your Ubuntu 16.04 (Unity) desktop. Tested on Ubuntu 16.04 and (so far) not compatible with newer Ubuntu versions 17.04, 17.10 and 18.04.
 
 ![screenshot-of-bitshares-indicator](screenshots/0.64.png "Version 0.64")
 
-Tested on Ubuntu 16.04 and (so far) not compatible with newer Ubuntu versions 17.04, 17.10 and 18.04. 
-
+ 
 You can make a free Bitshares account:
 
-at [https://wallet.bitshares.org/?r=buy-bitcoin](https://wallet.bitshares.org/?r=buy-bitcoin)
-
+English: [https://wallet.bitshares.org/?r=buy-bitcoin](https://wallet.bitshares.org/?r=buy-bitcoin)
+Russian: 
+Chinese: 
 
 Price data is provided by the Binance exchange API. You can make a free Binance trading account at [https://www.binance.com/?ref=22113850](https://www.binance.com/?ref=22113850)
 
