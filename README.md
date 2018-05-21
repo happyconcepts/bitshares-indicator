@@ -6,13 +6,13 @@ bitshares-indicator by @happyconcepts will monitor the price of Bitshares on you
  
 You can make a free Bitshares account:
 
-English: [https://wallet.bitshares.org/?r=buy-bitcoin](https://wallet.bitshares.org/?r=buy-bitcoin)
-Russian: 
-Chinese: 
+    English: [https://wallet.bitshares.org/?r=buy-bitcoin](https://wallet.bitshares.org/?r=buy-bitcoin)
+
+    Русский язык: [https://market.rudex.org/?r=buy-bitcoin](https://market.rudex.org/?r=buy-bitcoin)
 
 Price data is provided by the Binance exchange API. You can make a free Binance trading account at [https://www.binance.com/?ref=22113850](https://www.binance.com/?ref=22113850)
 
-Bugs and suggestions should be reported as [https://github.com/happyconcepts/bitshares-indicator/issues](issues) via Github. 
+Bugs and suggestions should be reported as [issues] (https://github.com/happyconcepts/bitshares-indicator/issues) via Github. 
 
 Your contribution to this open source project is welcome!
 
