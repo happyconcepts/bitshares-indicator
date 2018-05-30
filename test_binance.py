@@ -10,7 +10,6 @@ import bitshares_indicator
 class TestBitSharesIndicator(unittest.TestCase):
 
     def setUpModule():
-
 	print ("in setUpModule()")
 
     def test_Add(self):
@@ -24,4 +23,3 @@ class TestBitSharesIndicator(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
