@@ -5,7 +5,7 @@
 # https://github.com/happyconcepts/bitshares-indicator
 # mit license
 
-VERSION = '0.72 '
+VERSION = '0.73'
 APPID 	= 'bitshares-indicator'
 
 import os
@@ -40,6 +40,7 @@ class buyBTSindicator(object):
         )
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
+    # local user preferences
 	try:
 	    with open(prefFile, 'r') as f:
 		print "loading saved settings..."
