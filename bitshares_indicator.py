@@ -29,7 +29,7 @@ if not os.path.exists(dir):
     os.makedirs(dir)
 prefFile = os.path.join(dir, 'prefs.json')
 
-test = False
+test = True
 if test == True:
     print ("test mode")
 
@@ -137,63 +137,63 @@ class buyBTSindicator(object):
             self.price_update()
 
     def about(self, source):
-	dialog = Gtk.AboutDialog()
-	dialog.set_border_width(10)
+        dialog = Gtk.AboutDialog()
+        dialog.set_border_width(10)
         dialog.set_program_name('bitshares-indicator')
         dialog.set_version(VERSION)
         dialog.set_license('MIT License\n\n' + ' A copy of the license is available at https://github.com/happyconcepts/bitshares-indicator/blob/master/LICENSE' )
         dialog.set_wrap_license(True)
-	dialog.set_copyright('Copyright 2018 Ben Bird')
-	dialog.set_comments('Track Bitshares prices on Linux (Unity desktop)\n\n'+'Your donations help:\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
-	dialog.set_website('http://www.buybts.com')
-	pixbuf = Pixbuf.new_from_file_at_size("icons/bitshares.png", 45, 45)
-	dialog.set_logo(pixbuf)
-	dialog.run()
+        dialog.set_copyright('Copyright 2018 Ben Bird')
+        dialog.set_comments('Track Bitshares prices on Linux (Unity desktop)\n\n'+'Your donations help:\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
+        dialog.set_website('http://www.buybts.com')
+        pixbuf = Pixbuf.new_from_file_at_size("icons/bitshares.png", 45, 45)
+        dialog.set_logo(pixbuf)
+        dialog.run()
         dialog.destroy()
 
     def save_settings(self):
 
-	with open(prefFile, 'w') as uf:
-		uf.write('{"version":"0.1","base":"' +ind.base +'","interval":"'+str(ind.interval)+'","modified":"'+datetime.now().strftime('%m/%d %H:%M:%S')+'"}\n')
+        with open(prefFile, 'w') as uf:
+            uf.write('{"version":"0.1","base":"' +ind.base +'","interval":"'+str(ind.interval)+'","modified":"'+datetime.now().strftime('%m/%d %H:%M:%S')+'"}\n')
 
     def price_update(self):
         timestamp = datetime.now().strftime('%m/%d %H:%M:%S')
 
-	try:
-	    if self.price_active == True:
-		self.b = binance(self.symbol)
+        try:
+            if self.price_active == True:
+                self.b = binance(self.symbol)
 
-		if self.base =='EUR':
-		    self.c = coinmktcap(self.symbol, self.base)
-	     	    self.ind.set_label(self.c.run() + " ~BTC: "+ self.b.run() , "")
-		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
-		    print timestamp + " BTS price: "+ self.c.price()
+                if self.base =='EUR':
+                    self.c = coinmktcap(self.symbol, self.base)
+                    self.ind.set_label(self.c.run() + " ~BTC: "+ self.b.run() , "")
+                    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
+                    print (timestamp + " BTS price: "+ self.c.price())
 
                 else :
-		    self.g = gate(self.symbol, self.base)
-		    self.ind.set_label(self.g.run() + " ~BTC: "+ self.b.run() , "")
-		    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
-		    print timestamp + " BTS price: "+ self.g.price()
+                    self.g = gate(self.symbol, self.base)
+                    self.ind.set_label(self.g.run() + " ~BTC: "+ self.b.run() , "")
+                    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bts.png")
+                    print (timestamp + " BTS price: "+ self.g.price())
 
-		if (test == True):
-		    print "symbol/base: " +self.symbol +"/"+self.base
+                if (test == True):
+                    print ("symbol/base: " +self.symbol +"/"+self.base)
 
-	    else:
-		self.ind.set_label("Pricing is not active.","")
+            else:
+                self.ind.set_label("Pricing is not active.","")
 
-		print timestamp + " prices not updated (not active)"
-		if (test == True):
-		    print "update interval is " + str(self.interval) + " min"
+                print (timestamp + " prices not updated (not active)")
+                if (test == True):
+                    print ("update interval is " + str(self.interval) + " min")
 
         except Exception as e:
 
             self.ind.set_label("bitshares-indicator","")
-	    self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bell_on.png")
+            self.ind.set_icon(os.path.dirname(os.path.realpath(__file__)) +"/icons/bell_on.png")
 
-	    print timestamp + " prices not updated (check connection)"
+            print (timestamp + " prices not updated (check connection)")
 
-	    if test == True:
-	        print(str(e))
+            if test == True:
+                print("error: " + str(e))
 
         return True
 
@@ -202,9 +202,9 @@ class buyBTSindicator(object):
 
 class gate:
     def __init__(self, coin='bts', base='usdt'):
-	if base == 'USD':
-	    base = 'USDT'
-	self.pair = coin +"_"+ base
+        if base == 'USD':
+            base = 'USDT'
+        self.pair = coin +"_"+ base
         self.pair = self.pair.lower()
 
     def run(self):
@@ -215,29 +215,29 @@ class gate:
         if not json['result']:
             return "Gate says: "+ json['message']
         else:
-	    chg = json['percentChange']
-	    self.last = json['last']
+            chg = json['percentChange']
+            self.last = json['last']
 
-	    if type(chg) is not unicode: # its a number
-		chg = str(json['percentChange'])
+            if type(chg) is not unicode: # its a number
+                chg = str(json['percentChange'])
 
-	    # kludge fix #15 truncate str at 6 char.
-	    chg = (chg[:5]) if len(chg) > 5 else chg
+            # kludge fix #15 truncate str at 6 char.
+            chg = (chg[:5]) if len(chg) > 5 else chg
 
             if chg[:1] != '-':
                 chg = " +"+ chg +"% "
-	    else:
-		chg = " ("+chg+"%) "
+            else:
+                chg = " ("+chg+"%) "
 
-	    if type(self.last) is not unicode:
-		#print type(self.last)
-		self.last = round(json['last'],4)
-		self.last = str(self.last)
+            if type(self.last) is not unicode:
+                #print type(self.last)
+                self.last = round(json['last'],4)
+                self.last = str(self.last)
 
-	    return '$'+self.last + " " +chg
+            return '$'+self.last + " " +chg
 
     def price(self):
-	return "$" +self.last
+        return "$" +self.last
 
 class binance:
     def __init__(self, coin='BTS', base='BTC'):
@@ -252,38 +252,38 @@ class binance:
         if not json['price']:
             return "Error: binance (api): "+ json['msg']
         else:
-	    return u'\u0E3F'+str(json['price'])
+            return u'\u0E3F'+str(json['price'])
 
 class coinmktcap:
     def __init__(self, coin='bitshares', base='EUR'):
-	if coin == 'BTS':
-	    coin = 'bitshares'
+        if coin == 'BTS':
+            coin = 'bitshares'
 
-	self.pair = coin +"/?convert="+base
-	self.base = base
+        self.pair = coin +"/?convert="+base
+        self.base = base
 
     def run(self):
         url = 'https://api.coinmarketcap.com/v1/ticker/'+self.pair
         response = requests.get(url)
         json = response.json()
 
-	self.cmcfield = 'price_'+self.base.lower() # price_eur
-	if not json[0][self.cmcfield]:
+        self.cmcfield = 'price_'+self.base.lower() # price_eur
+        if not json[0][self.cmcfield]:
             return "Error: coinmarketcap (api): " + json[0]['error']
 
         else:
-	    self.last = round(float(json[0][self.cmcfield]),4)
-	    self.chg = round(float(json[0]['percent_change_24h']),1)
-	    self.chg = str(self.chg)
+            self.last = round(float(json[0][self.cmcfield]),4)
+            self.chg = round(float(json[0]['percent_change_24h']),1)
+            self.chg = str(self.chg)
 
-	    if self.chg[:1] != '-':
+            if self.chg[:1] != '-':
                 self.chg = " +"+ self.chg +"% "
-	    else:
-		self.chg = " ("+self.chg+"%) "
-	    return u'\u20AC' + str(self.last) + " "+ self.chg
+            else:
+                self.chg = " ("+self.chg+"%) "
+            return u'\u20AC' + str(self.last) + " "+ self.chg
 
     def price(self):
-	return  u'\u20AC'+str(self.last)
+        return  u'\u20AC'+str(self.last)
 
 
 class SettingsWindow(Gtk.Window):
@@ -292,8 +292,8 @@ class SettingsWindow(Gtk.Window):
         Gtk.Window.__init__(self, title="Settings")
 
         self.set_border_width(15)
-	self.set_default_size(300, 160)
-	self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_default_size(300, 160)
+        self.set_position(Gtk.WindowPosition.CENTER)
         box_outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=15)
         self.add(box_outer)
 
@@ -301,89 +301,89 @@ class SettingsWindow(Gtk.Window):
         label1 = Gtk.Label("Price Updates", xalign=0)
         switch = Gtk.Switch()
         switch.props.valign = Gtk.Align.CENTER
-	switch.set_active(True)
-	hbox.pack_start(label1, True, True, 0)
+        switch.set_active(True)
+        hbox.pack_start(label1, True, True, 0)
         hbox.pack_start(switch, False, True, 0)
 
-	box_outer.pack_start(hbox, True, True, 0)
-	hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
-	label = Gtk.Label("Base currency:", xalign=0)
+        box_outer.pack_start(hbox, True, True, 0)
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        label = Gtk.Label("Base currency:", xalign=0)
         button1 = Gtk.RadioButton.new_with_label_from_widget(None, "$ USD")
 
-	if ind.base == 'USD':
-	    button1.set_active(True)
+        if ind.base == 'USD':
+            button1.set_active(True)
 
-	button1.connect("clicked", self.change_base, "USD")
-	hbox.pack_start(label, True, True, 0)
-	hbox.pack_start(button1, False, False, 0)
+        button1.connect("clicked", self.change_base, "USD")
+        hbox.pack_start(label, True, True, 0)
+        hbox.pack_start(button1, False, False, 0)
 
-	button2 = Gtk.RadioButton.new_from_widget(button1)
+        button2 = Gtk.RadioButton.new_from_widget(button1)
         button2.set_label(u'\u20AC' +" Euro")
 
-	if ind.base == 'EUR':
-	    button2.set_active(True)
+        if ind.base == 'EUR':
+            button2.set_active(True)
 
         button2.connect("clicked", self.change_base, "EUR")
 
 	# integer rturned is the model index of the currently active item, or -1 if no active item.
-	hbox.pack_start(button2, False, False, 0)
-	box_outer.pack_start(hbox, True, True, 0)
+        hbox.pack_start(button2, False, False, 0)
+        box_outer.pack_start(hbox, True, True, 0)
 
-	hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         label3 = Gtk.Label("Update interval, minutes", xalign=0)
         combo = Gtk.ComboBoxText()
-	combo.connect("changed", self.change_interval) ##
+        combo.connect("changed", self.change_interval) ##
         combo.insert(0, "1", "1")
-	combo.insert(1, "5", "5")
+        combo.insert(1, "5", "5")
         combo.insert(2, "10", "10")
-	combo.insert(3, "15", "15")
-	combo.insert(4, "30", "30")
-	combo.insert(5, "60", "60")
-	combo.insert(6, "240", "240")
+        combo.insert(3, "15", "15")
+        combo.insert(4, "30", "30")
+        combo.insert(5, "60", "60")
+        combo.insert(6, "240", "240")
 
-	if ind.interval == 1:
-	    combo.set_active(0)
-	elif ind.interval == 5:
-	    combo.set_active(1)
-	elif ind.interval == 10:
-	    combo.set_active(2)
-	elif ind.interval == 15:
-	    combo.set_active(3)
-	elif ind.interval == 30:
-	    combo.set_active(4)
-	elif ind.interval == 60:
-	    combo.set_active(5)
-	elif ind.interval == 240:
-	    combo.set_active(6)
-	else:
-	    pass
+        if ind.interval == 1:
+            combo.set_active(0)
+        elif ind.interval == 5:
+            combo.set_active(1)
+        elif ind.interval == 10:
+            combo.set_active(2)
+        elif ind.interval == 15:
+            combo.set_active(3)
+        elif ind.interval == 30:
+            combo.set_active(4)
+        elif ind.interval == 60:
+            combo.set_active(5)
+        elif ind.interval == 240:
+            combo.set_active(6)
+        else:
+            pass
 
         hbox.pack_start(label3, True, True, 0)
         hbox.pack_start(combo, False, True, 0)
-	box_outer.pack_start(hbox, True, True, 0)
+        box_outer.pack_start(hbox, True, True, 0)
 
 
     def change_base(self, button, name):
 
-	if button.get_active():
-	    ind.base_last = ind.base
-	    ind.base = name
+        if button.get_active():
+            ind.base_last = ind.base
+            ind.base = name
             print("base is set to " +ind.base)
 
     def change_interval(self, combo):
 
-	self.interval_current = str(ind.interval)
-	self.interval_new = combo.get_active_text()
+        self.interval_current = str(ind.interval)
+        self.interval_new = combo.get_active_text()
 
         if self.interval_new is not None:
-	    try:
-	        GLib.source_remove(ind.testid)
-		ind.interval_last = int(ind.interval)
-		ind.interval = int(self.interval_new)
-		ind.testid = GLib.timeout_add_seconds(60 * ind.interval, ind.price_update)
+            try:
+                GLib.source_remove(ind.testid)
+                ind.interval_last = int(ind.interval)
+                ind.interval = int(self.interval_new)
+                ind.testid = GLib.timeout_add_seconds(60 * ind.interval, ind.price_update)
 
-	    except Exception as e:
-		print ("could not change update interval")
+            except Exception as e:
+                print ("could not change update interval")
 
 def add (x,y):
     """Add function"""
@@ -393,6 +393,6 @@ def add (x,y):
 if __name__ == "__main__":
 
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-    print "starting "+APPID +" v. "+VERSION
+    print ("starting "+APPID +" v. "+VERSION)
     ind = buyBTSindicator()
     ind.main()
