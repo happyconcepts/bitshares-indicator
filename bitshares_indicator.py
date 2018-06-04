@@ -31,58 +31,58 @@ prefFile = os.path.join(dir, 'prefs.json')
 
 test = False
 if test == True:
-    print "test mode"
+    print ("test mode")
 
 class buyBTSindicator(object):
     def __init__(self):
-	self.ind = AppIndicator.Indicator.new(APPID,
+        self.ind = AppIndicator.Indicator.new(APPID,
 	PROJECTDIR + "/icons/bts.png",AppIndicator.IndicatorCategory.SYSTEM_SERVICES
         )
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
-    # local user preferences
-	try:
-	    with open(prefFile, 'r') as f:
-		print "loading saved settings..."
-		prefs = json.load(f)
+        # local user preferences
+        try:
+            with open(prefFile, 'r') as f:
+                print ("loading saved settings...")
+                prefs = json.load(f)
 
-	except IOError as e:
+        except IOError as e:
 	    #Does not exist OR no read permissions...
-	    print "no saved settings found"
-	    if test == True:
-		print "Unable to access prefs.json"
-		print "prefs: " +dir +"/"
-		print e
-	    print "creating settings file ..."
-	    with open(prefFile, 'w') as uf:
-		uf.write('{"version":"0.1","base":"USD","interval":"5","modified":"'+datetime.now().strftime('%m/%d %H:%M:%S')+'"}\n')
-	    with open(prefFile, 'r') as f:
-		prefs = json.load(f) # read prefs.
+            print ("no saved settings found")
+            if test == True:
+                print ("Unable to access prefs.json")
+                print ("prefs: " +dir +"/")
+                print (e)
+            print ("creating settings file ...")
+            with open(prefFile, 'w') as uf:
+                uf.write('{"version":"0.1","base":"USD","interval":"5","modified":"'+datetime.now().strftime('%m/%d %H:%M:%S')+'"}\n')
+            with open(prefFile, 'r') as f:
+                prefs = json.load(f) # read prefs.
 
-	self.price_active = True
+        self.price_active = True
 
-	if prefs:
-	    self.interval = int(prefs['interval'])
-	    self.base = prefs['base']
-	    self.base_last = prefs['base']
-	else:
-	    self.interval = 5
-	    self.base = 'USD'
-	    self.base_last = 'USD'
+        if prefs:
+            self.interval = int(prefs['interval'])
+            self.base = prefs['base']
+            self.base_last = prefs['base']
+        else:
+            self.interval = 5
+            self.base = 'USD'
+            self.base_last = 'USD'
 
-	self.symbol = 'BTS'
+        self.symbol = 'BTS'
 
-	self.menu = Gtk.Menu()
-	self.build_menu()
+        self.menu = Gtk.Menu()
+        self.build_menu()
 
         self.price_update()
         self.testid = GLib.timeout_add_seconds(60 * self.interval, self.price_update)
 
     def build_menu(self):
 
-	item_settings = Gtk.MenuItem()
+        item_settings = Gtk.MenuItem()
         item_settings.set_label("Settings...")
-	item_settings.connect("activate", self.handler_settings_callback)
+        item_settings.connect("activate", self.handler_settings_callback)
         item_settings.show()
         self.menu.append(item_settings)
 
@@ -92,13 +92,13 @@ class buyBTSindicator(object):
         item_refresh.show()
         self.menu.append(item_refresh)
 
-	item_about = Gtk.MenuItem()
+        item_about = Gtk.MenuItem()
         item_about.set_label("About bitshares-indicator...")
         item_about.connect("activate", self.about)
         item_about.show()
         self.menu.append(item_about)
 
-	item = Gtk.MenuItem()
+        item = Gtk.MenuItem()
         item.set_label("Exit")
         item.connect("activate", self.handler_menu_exit)
         item.show()
@@ -109,31 +109,31 @@ class buyBTSindicator(object):
 
     def handler_settings_callback (self, source):
 
-	win = SettingsWindow()
-	win.set_keep_above(True)
-	win.connect("destroy", self.handler_settings)
-	win.show_all()
+        win = SettingsWindow()
+        win.set_keep_above(True)
+        win.connect("destroy", self.handler_settings)
+        win.show_all()
 
     @staticmethod
     def handler_menu_exit(evt):
         Gtk.main_quit()
-	print APPID +" has quit."
+        print (APPID +" has quit.")
 
     def handler_menu_reload(self, source):
-	    ind.base_last = ind.base
-            self.price_update()
+        ind.base_last = ind.base
+        self.price_update()
 
     def handler_settings(self, source):
-	if (test == True):
-	    print "ind.base: " +ind.base
-	    print "ind.base_last: " +ind.base_last
-	    print "ind.interval: " +str(ind.interval)
-	    print "ind.interval_last: " +str(ind.interval_last)
-	    #print testing.dump(source)
+        if (test == True):
+            print ("ind.base: " +ind.base)
+            print ("ind.base_last: " +ind.base_last)
+            print ("ind.interval: " +str(ind.interval))
+            print ("ind.interval_last: " +str(ind.interval_last))
+            #print testing.dump(source)
 
-	if (ind.base_last != ind.base) or (ind.interval_last != ind.interval):
-	    ind.base_last = ind.base
-	    self.save_settings()
+        if (ind.base_last != ind.base) or (ind.interval_last != ind.interval):
+            ind.base_last = ind.base
+            self.save_settings()
             self.price_update()
 
     def about(self, source):
