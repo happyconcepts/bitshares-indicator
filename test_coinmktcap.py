@@ -2,7 +2,7 @@
 # https://github.com/happyconcepts/bitshares-indicator
 # bitshares-indicator copyright 2018 ben bird
 
-# python -m unittest test_binance
+# python -m unittest test_coinmktcap
 
 import unittest
 import bitshares_indicator
@@ -17,10 +17,10 @@ class TestBitSharesIndicator(unittest.TestCase):
 	result = bitshares_indicator.add(10,5)
 	self.assertEqual(result, 15)
 
-    # test binance API
-    def test_Binance(self):
-	b = bitshares_indicator.binance()
-	result = b.run()
+    # test coinmktcapAPI
+    def test_CoinMktCap(self):
+	c = bitshares_indicator.coinmktcap()
+	result = c.run()
 	self.assertTrue(result)
 
 if __name__ == '__main__':
