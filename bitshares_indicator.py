@@ -5,7 +5,7 @@
 # https://github.com/happyconcepts/bitshares-indicator
 # mit license
 
-VERSION = '0.74'
+VERSION = '0.8'
 APPID 	= 'bitshares-indicator'
 
 import os
@@ -14,6 +14,7 @@ import gi
 import signal
 from datetime import datetime
 import json
+import sys
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GLib
@@ -29,7 +30,7 @@ if not os.path.exists(dir):
     os.makedirs(dir)
 prefFile = os.path.join(dir, 'prefs.json')
 
-test = True
+test = False
 if test == True:
     print ("test mode")
 
@@ -144,8 +145,8 @@ class buyBTSindicator(object):
         dialog.set_version(VERSION)
         dialog.set_license('MIT License\n\n' + ' A copy of the license is available at https://github.com/happyconcepts/bitshares-indicator/blob/master/LICENSE' )
         dialog.set_wrap_license(True)
-        dialog.set_copyright('Copyright 2018 Ben Bird')
-        dialog.set_comments('Track Bitshares prices on Linux (Unity desktop)\n\n'+'Your donations help:\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
+        dialog.set_copyright('Copyright 2018 Ben Bird and contributors')
+        dialog.set_comments('Track Bitshares prices on Linux (Unity desktop)\n'+'Loaded with Python '+ str(sys.version_info[0]) +'\n\n'+'Your donations help:\n\n' + 'BTS: buy-bitcoin\n' +'BitUSD: buy-bitcoin\n'+'Bitcoin: 1FZhqidv4oMRoiry9mGASFL7JSgdB27Mmn')
         dialog.set_website('http://www.buybts.com')
         pixbuf = Pixbuf.new_from_file_at_size("icons/bitshares.png", 45, 45)
         dialog.set_logo(pixbuf)
@@ -219,7 +220,8 @@ class gate:
             chg = json['percentChange']
             self.last = json['last']
 
-            if type(chg) is not unicode: # its a number
+            if chg.isnumeric():
+            # its a number
                 chg = str(json['percentChange'])
 
             # kludge fix #15 truncate str at 6 char.
@@ -230,8 +232,7 @@ class gate:
             else:
                 chg = " ("+chg+"%) "
 
-            if type(self.last) is not unicode:
-                #print type(self.last)
+            if self.last.isnumeric():
                 self.last = round(json['last'],4)
                 self.last = str(self.last)
 
@@ -369,7 +370,8 @@ class SettingsWindow(Gtk.Window):
         if button.get_active():
             ind.base_last = ind.base
             ind.base = name
-            print("base is set to " +ind.base)
+            if test == True:
+                print("base is set to " +ind.base)
 
     def change_interval(self, combo):
 
