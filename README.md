@@ -6,7 +6,7 @@ Please report bugs and suggestions as [issues](https://github.com/happyconcepts/
 ![screenshot-of-bitshares-indicator](screenshots/0.64.png "Version 0.64")
 
 # How to Load bitshares-indicator
-This software has been tested with python 2.y. Navigate to the directory containing the project and type the following at the command line:
+This software has been tested with python 2.7. Navigate to the directory containing the project and type the following at the command line:
 `python bitshares_indicator.py`
 
 # How to Support bitshares-indicator
