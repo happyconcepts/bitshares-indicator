@@ -2,3 +2,12 @@ build/*
 bitshares-indicator/
 *.pyc
 
+# Unit test
+coverage.xml
+.pytest_cache/
+
+# PyBuilder
+target/
+
+# C extensions
+*.so
